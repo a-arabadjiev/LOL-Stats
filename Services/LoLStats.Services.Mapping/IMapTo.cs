@@ -1,0 +1,7 @@
+﻿namespace LoLStats.Services.Mapping
+{
+    // ReSharper disable once UnusedTypeParameter
+    public interface IMapTo<T>
+    {
+    }
+}

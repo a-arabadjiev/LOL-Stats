@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.205" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LoLStats.Common\LoLStats.Common.csproj" />
+    <ProjectReference Include="..\..\Data\LoLStats.Data.Common\LoLStats.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\LoLStats.Data.Models\LoLStats.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\LoLStats.Data\LoLStats.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LoLStats.Services.Data\LoLStats.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LoLStats.Services.Mapping\LoLStats.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\LoLStats.Services.Messaging\LoLStats.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Services\LoLStats.Services\LoLStats.Services.csproj" />
+  </ItemGroup>
+
+</Project>
