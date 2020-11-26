@@ -54,6 +54,8 @@
                     }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
 
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddSingleton(this.configuration);
 
             // Data repositories

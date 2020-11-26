@@ -24,6 +24,28 @@
         {
         }
 
+        public DbSet<AbilityPerLevel> AbilitiesPerLevel { get; set; }
+
+        public DbSet<Item> Items { get; set; }
+
+        public DbSet<Rune> Runes { get; set; }
+
+        public DbSet<Champion> Champions { get; set; }
+
+        public DbSet<SummonerSpell> SummonerSpells { get; set; }
+
+        public DbSet<BaseChampionAbility> BaseChampionAbilities { get; set; }
+
+        public DbSet<ChampionAbilities> ChampionAbilities { get; set; }
+
+        public DbSet<ChampionItems> ChampionItems { get; set; }
+
+        public DbSet<ChampionRole> ChampionRoles { get; set; }
+
+        public DbSet<ChampionRunes> ChampionRunes { get; set; }
+
+        public DbSet<ChampionSummonerSpells> ChampionSummonerSpells { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
