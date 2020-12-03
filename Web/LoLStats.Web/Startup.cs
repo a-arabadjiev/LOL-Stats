@@ -8,7 +8,6 @@
     using LoLStats.Data.Models;
     using LoLStats.Data.Repositories;
     using LoLStats.Data.Seeding;
-    using LoLStats.Services;
     using LoLStats.Services.Data;
     using LoLStats.Services.Mapping;
     using LoLStats.Services.Messaging;
