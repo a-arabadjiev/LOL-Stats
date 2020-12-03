@@ -21,7 +21,7 @@
 
         public CastingResource CastingResource { get; set; }
 
-        public ICollection<AbilityPerLevel> PerLevel { get; set; }
+        public virtual ICollection<AbilityPerLevel> PerLevel { get; set; }
 
         public int ChampionId { get; set; }
 

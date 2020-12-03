@@ -11,7 +11,7 @@
             this.Items = new HashSet<Item>();
         }
 
-        public ICollection<Item> Items { get; set; }
+        public virtual ICollection<Item> Items { get; set; }
 
         public int ChampionId { get; set; }
 

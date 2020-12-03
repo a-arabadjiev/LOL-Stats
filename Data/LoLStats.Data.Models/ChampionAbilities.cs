@@ -19,6 +19,6 @@
 
         public virtual Champion Champion { get; set; }
 
-        public ICollection<BaseChampionAbility> Abilities { get; set; }
+        public virtual ICollection<BaseChampionAbility> Abilities { get; set; }
     }
 }

@@ -29,18 +29,18 @@
 
         public bool IsFree { get; set; }
 
-        public ICollection<BaseChampionAbility> BaseAbilities { get; set; }
+        public virtual ICollection<BaseChampionAbility> BaseAbilities { get; set; }
 
-        public ICollection<ChampionAbilities> ChampionAbilities { get; set; }
+        public virtual ICollection<ChampionAbilities> ChampionAbilities { get; set; }
 
-        public ICollection<ChampionRole> ChampionRoles { get; set; }
+        public virtual ICollection<ChampionRole> ChampionRoles { get; set; }
 
-        public ICollection<ChampionSummonerSpells> ChampionSummonerSpells { get; set; }
+        public virtual ICollection<ChampionSummonerSpells> ChampionSummonerSpells { get; set; }
 
-        public ICollection<ChampionStarterItems> ChampionStarterItems { get; set; }
+        public virtual ICollection<ChampionStarterItems> ChampionStarterItems { get; set; }
 
-        public ICollection<ChampionItems> ChampionItems { get; set; }
+        public virtual ICollection<ChampionItems> ChampionItems { get; set; }
 
-        public ICollection<ChampionRunes> ChampionRunes { get; set; }
+        public virtual ICollection<ChampionRunes> ChampionRunes { get; set; }
     }
 }

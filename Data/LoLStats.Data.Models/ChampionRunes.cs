@@ -19,6 +19,6 @@
 
         public virtual Champion Champion { get; set; }
 
-        public ICollection<Rune> Runes { get; set; }
+        public virtual ICollection<Rune> Runes { get; set; }
     }
 }

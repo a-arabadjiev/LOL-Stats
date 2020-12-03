@@ -15,7 +15,7 @@
 
         public decimal WinRate { get; set; }
 
-        public ICollection<SummonerSpell> SummonerSpells { get; set; }
+        public virtual ICollection<SummonerSpell> SummonerSpells { get; set; }
 
         public int ChampionId { get; set; }
 
