@@ -65,7 +65,11 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
+            services.AddTransient<IRiotSharpService, RiotSharpService>();
+            services.AddTransient<IUGGScraperService, UGGScraperService>();
             services.AddTransient<IEmailSender, NullMessageSender>();
+
+            // Application data services
             services.AddTransient<ISettingsService, SettingsService>();
         }
 

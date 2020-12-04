@@ -19,13 +19,19 @@
 
         public string Name { get; set; }
 
+        public string Lore { get; set; }
+
+        public string Key { get; set; }
+
+        public string Partype { get; set; }
+
         public decimal WinRate { get; set; }
 
         public decimal PickRate { get; set; }
 
         public decimal BanRate { get; set; }
 
-        public string ChampionTier { get; set; }
+        public string Tier { get; set; }
 
         public bool IsFree { get; set; }
 
@@ -42,5 +48,7 @@
         public virtual ICollection<ChampionItems> ChampionItems { get; set; }
 
         public virtual ICollection<ChampionRunes> ChampionRunes { get; set; }
+
+        public virtual ICollection<Champion> CounterChampions { get; set; }
     }
 }
