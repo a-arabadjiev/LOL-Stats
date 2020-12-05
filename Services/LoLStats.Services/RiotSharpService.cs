@@ -1,10 +1,7 @@
 ﻿namespace LoLStats.Services
-{
-    using System;
+{ 
     using System.Collections.Generic;
-    using System.Text;
     using System.Linq;
-    using System.Threading.Tasks;
 
     using RiotSharp;
 
@@ -19,14 +16,9 @@
             this.latestVersion = this.api.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
         }
 
-        public List<string> GetAllChampionKeys()
+        public string[] GetAllChampionKeys()
         {
-            return this.api.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values.Select(x => x.Key).ToList();
-        }
-
-        public async Task PopulateDbWithBaseGameData()
-        {
-            var champions = this.api.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values;
+            return this.api.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values.Select(x => x.Key).ToArray();
         }
     }
 }

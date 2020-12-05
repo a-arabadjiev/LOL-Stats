@@ -5,7 +5,7 @@
         Top,
         Middle,
         Jungle,
-        Bottom,
-        Suppport,
+        ADC,
+        Support,
     }
 }

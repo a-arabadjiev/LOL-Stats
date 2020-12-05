@@ -13,58 +13,55 @@
     using LoLStats.Services.Models;
     using RiotSharp;
 
-    public class UGGScraperService : IUGGScraperService
+    public class ScraperService : IScraperService
     {
         private readonly IConfiguration config;
         private readonly IBrowsingContext context;
-        private readonly RiotApi riotApi;
-        private readonly string latestVersion;
+        private readonly IRiotSharpService riotSharpService;
 
-        public UGGScraperService()
+        public ScraperService(IRiotSharpService riotSharpService)
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.context = BrowsingContext.New(this.config);
-            this.riotApi = RiotApi.GetDevelopmentInstance("RGAPI-46dba1f0-2bbc-4b15-95c3-75f9bab62f9b");
-            this.latestVersion = this.riotApi.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
+            this.riotSharpService = riotSharpService;
         }
 
-        public void PopulateDbWithChampionStatistics()
+        public ConcurrentBag<ChampionPageDto> ReturnChampionPageInfo()
         {
             var concurrentBag = new ConcurrentBag<ChampionPageDto>();
 
-            var championKeys = this.GetAllChampionKeys();
+            var championKeys = this.riotSharpService.GetAllChampionKeys();
 
             Parallel.For(0, championKeys.Length, (i) =>
             {
-                try
-                {
-                    var championPageDto = this.GetChampionStatistics(championKeys[i]);
-                    concurrentBag.Add(championPageDto);
-                }
-                catch
-                {
-                }
+                var championPageDto = this.GetChampionStatistics(championKeys[i]);
+                concurrentBag.Add(championPageDto);
             });
+
+            return concurrentBag;
         }
 
         private ChampionPageDto GetChampionStatistics(string championName)
         {
-            var document = this.context
+            var uggDocument = this.context
                 .OpenAsync($"https://u.gg/lol/champions/{championName}/build")
                 .GetAwaiter()
                 .GetResult();
 
-            if (document.StatusCode == System.Net.HttpStatusCode.NotFound || document.DocumentElement.TextContent.Contains("THIS PAGEDOESN'T EXIST"))
+            if (uggDocument.StatusCode == System.Net.HttpStatusCode.NotFound || uggDocument.DocumentElement.TextContent.Contains("THIS PAGEDOESN'T EXIST"))
             {
                 throw new InvalidOperationException();
             }
 
             var championPageDto = new ChampionPageDto();
 
-            // Lane
-            var championHeaderElement = document.QuerySelector(SelectorConstants.ChampionHeader);
+            championPageDto.Key = championName;
 
-            string lanePattern = "(?<=for )[A-Z]{1}[a-z]+";
+            // U.GG Scraping
+            // Lane
+            var championHeaderElement = uggDocument.QuerySelector(SelectorConstants.ChampionHeader);
+
+            string lanePattern = "(?<=for )[A-Za-z]+(?=,)";
 
             string lane = Regex.Match(championHeaderElement.TextContent, lanePattern).ToString();
 
@@ -79,29 +76,32 @@
             championPageDto.Patch = Regex.Match(championHeaderElement.TextContent, patchPattern).ToString();
 
             // WinRate
-            var championRankingStatsElement = document.QuerySelector(SelectorConstants.ChampionRankingStatsSection);
+            var championRankingStatsElement = uggDocument.QuerySelector(SelectorConstants.ChampionRankingStatsSection);
 
             string winRatePattern = "[0-9.]+(?=%Win)";
 
-            championPageDto.ChampionWinRate = double.Parse(Regex.Match(championRankingStatsElement.TextContent, winRatePattern).ToString());
+            championPageDto.ChampionWinRate = double.TryParse(Regex.Match(championRankingStatsElement.TextContent, winRatePattern).ToString(), out double resultWinRate)
+                ? double.Parse(Regex.Match(championRankingStatsElement.TextContent, winRatePattern).ToString()) : 0;
 
             // PickRate
             string pickRatePattern = "[0-9.]+(?=%Pick)";
 
-            championPageDto.ChampionPickRate = double.Parse(Regex.Match(championRankingStatsElement.TextContent, pickRatePattern).ToString());
+            championPageDto.ChampionPickRate = double.TryParse(Regex.Match(championRankingStatsElement.TextContent, pickRatePattern).ToString(), out double resultPickRate)
+                ? double.Parse(Regex.Match(championRankingStatsElement.TextContent, pickRatePattern).ToString()) : 0;
 
             // BanRate
             string banRatePattern = "[0-9.]+(?=%Ban)";
 
-            championPageDto.ChampionBanRate = double.Parse(Regex.Match(championRankingStatsElement.TextContent, banRatePattern).ToString());
+            championPageDto.ChampionBanRate = double.TryParse(Regex.Match(championRankingStatsElement.TextContent, banRatePattern).ToString(), out double resultBanRate)
+                ? double.Parse(Regex.Match(championRankingStatsElement.TextContent, banRatePattern).ToString()) : 0;
 
             // MatchesCount
             string matchesCountPattern = "[0-9,]+(?=Matches)";
 
-            championPageDto.ChampionTotalMatches = int.Parse(Regex.Match(championRankingStatsElement.TextContent, matchesCountPattern).ToString());
+            championPageDto.ChampionTotalMatches = int.Parse(Regex.Match(championRankingStatsElement.TextContent, matchesCountPattern).ToString().Replace(",", string.Empty));
 
             // SummonerSpells
-            var summonerSpellsElement = document.QuerySelector(SelectorConstants.SummonerSpellsSection);
+            var summonerSpellsElement = uggDocument.QuerySelector(SelectorConstants.SummonerSpellsSection);
 
             string summonerSpellsPattern = "(?<=Summoner Spell )[A-Za-z]+";
 
@@ -121,10 +121,10 @@
             // SummonerSpellsTotalMatches
             string summonersTotalMatchesPattern = "[0-9,]+(?= Matches)";
 
-            championPageDto.SummonerSpellsTotalMatches = int.Parse(Regex.Match(summonerSpellsElement.TextContent, summonersTotalMatchesPattern).ToString());
+            championPageDto.SummonerSpellsTotalMatches = int.Parse(Regex.Match(summonerSpellsElement.TextContent, summonersTotalMatchesPattern).ToString().Replace(",", string.Empty));
 
             // RuneTrees
-            var runesElement = document.QuerySelector(SelectorConstants.RunesSection);
+            var runesElement = uggDocument.QuerySelector(SelectorConstants.RunesSection);
 
             string mainRuneTreePattern = "(?<=The Rune Tree )[A-Z][a-z]+";
 
@@ -144,10 +144,10 @@
             // RunesMatchesCount
             string runeMatchesCountPattern = "[0-9,]+(?= Matches)";
 
-            championPageDto.RunesMatchesCount = int.Parse(Regex.Matches(runesElement.TextContent, runeMatchesCountPattern)[0].ToString());
+            championPageDto.RunesMatchesCount = int.Parse(Regex.Matches(runesElement.TextContent, runeMatchesCountPattern)[0].ToString().Replace(",", string.Empty));
 
             // PrimaryRuneTreeRunes
-            var primaryRuneTreeElements = document.QuerySelector(SelectorConstants.PrimaryRuneTreeSection).Children.ToList();
+            var primaryRuneTreeElements = uggDocument.QuerySelector(SelectorConstants.PrimaryRuneTreeSection).Children.ToList();
 
             primaryRuneTreeElements.RemoveAt(0);  // removes unnecesary div element
 
@@ -166,7 +166,7 @@
             }
 
             // SecondaryRuneTreeRunes
-            var secondaryRuneTreeElements = document.QuerySelector(SelectorConstants.SecondaryRuneTreeSection).Children.ToList();
+            var secondaryRuneTreeElements = uggDocument.QuerySelector(SelectorConstants.SecondaryRuneTreeSection).Children.ToList();
             secondaryRuneTreeElements.RemoveAt(0); // removes unnecesary div element
 
             foreach (var secondaryRuneTreeElement in secondaryRuneTreeElements)
@@ -184,7 +184,7 @@
             // StatRunes
             var statRunes = new List<string>();
 
-            var statRuneTreeElements = document.QuerySelector(SelectorConstants.StatsRuneSection).Children.ToList();
+            var statRuneTreeElements = uggDocument.QuerySelector(SelectorConstants.StatsRuneSection).Children.ToList();
             string statRuneNamePatter = "(?<=alt=\")[A-Za-z ]+";
 
             foreach (var statRuneElement in statRuneTreeElements)
@@ -202,7 +202,7 @@
             // SkillPriority
             var skills = new List<string>();
 
-            var skillsSectionElement = document.QuerySelector(SelectorConstants.SkillsSection);
+            var skillsSectionElement = uggDocument.QuerySelector(SelectorConstants.SkillsSection);
 
             string skillsPattern = "[A-Z]{1}(?=:)";
 
@@ -221,12 +221,12 @@
             // SkillsMatchesCount
             string skillsMatchesCountPattern = "[0-9,]+(?= Matches)";
 
-            championPageDto.SkillsMatchesCount = int.Parse(Regex.Match(skillsSectionElement.InnerHtml, skillsMatchesCountPattern).ToString());
+            championPageDto.SkillsMatchesCount = int.Parse(Regex.Match(skillsSectionElement.InnerHtml, skillsMatchesCountPattern).ToString().Replace(",", string.Empty));
 
             // CounterChampions
             List<string> counterChampions = new List<string>();
 
-            var counterChampionsSectionElement = document.QuerySelector(SelectorConstants.CounterChampionsSection);
+            var counterChampionsSectionElement = uggDocument.QuerySelector(SelectorConstants.CounterChampionsSection);
 
             string bestCounterChampionPattern = "[A-Za-z &.]+(?=[0-9])";
 
@@ -243,12 +243,54 @@
                 championPageDto.CounterChampions.Add(counterChamp.ToString());
             }
 
-            return championPageDto;
-        }
+            // Meta.src Scraping
+            // StartingItems
+            var metaSrcDocument = this.context
+                .OpenAsync($"https://www.metasrc.com/5v5/kr/champion/{championName}/{lane}")
+                .GetAwaiter()
+                .GetResult();
 
-        private string[] GetAllChampionKeys()
-        {
-            return this.riotApi.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values.Select(x => x.Key).ToArray();
+            // Invalid Champion Page
+            if (metaSrcDocument.DocumentElement.TextContent.Contains("May the METAcat guide you!"))
+            {
+                throw new InvalidOperationException();
+            }
+
+            var startingItemElements = metaSrcDocument.QuerySelector(SelectorConstants.StartingItemsDiv).Children;
+
+            string startingItemPattern = "(?<=alt=\")[A-Za-z ']+(?=\"><)";
+
+            foreach (var itemElement in startingItemElements)
+            {
+                string item = Regex.Match(itemElement.InnerHtml, startingItemPattern).ToString();
+                championPageDto.StartingItems.Add(item);
+            }
+
+            // StartingItemsWin&PickRate
+            var startingItemsSectionElement = metaSrcDocument.QuerySelector(SelectorConstants.StartingItemsSection);
+
+            string startingItemsRatesPattern = @"(?<=<span>)[0-9]+(?=%</span>)";
+
+            var startingItemRates = Regex.Matches(startingItemsSectionElement.InnerHtml, startingItemsRatesPattern).ToArray();
+
+            championPageDto.StartingItemsWinRate = int.Parse(startingItemRates[0].ToString());
+            championPageDto.StartingItemsPickRate = int.Parse(startingItemRates[1].ToString());
+
+            // MainItems
+            var mainItemsSectionElements = metaSrcDocument.QuerySelector(SelectorConstants.MainItemsSection).Children;
+
+            string mainItemPattern = "[A-Za-z ']+(?=[0-9]+ [0-9]+)";
+            string mainItemWinRatePattern = @"(?<=>)[0-9]+(?=%<\/div>)";
+
+            foreach (var itemElement in mainItemsSectionElements)
+            {
+                string item = Regex.Match(itemElement.TextContent, mainItemPattern).ToString();
+                string winRate = Regex.Match(itemElement.InnerHtml, mainItemWinRatePattern).ToString();
+
+                championPageDto.ItemsWinRateKvp[item] = int.Parse(winRate);
+            }
+
+            return championPageDto;
         }
     }
 }

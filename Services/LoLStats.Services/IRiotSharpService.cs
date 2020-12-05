@@ -5,8 +5,6 @@
 
     public interface IRiotSharpService
     {
-        List<string> GetAllChampionKeys();
-
-        public Task PopulateDbWithBaseGameData();
+        string[] GetAllChampionKeys();
     }
 }

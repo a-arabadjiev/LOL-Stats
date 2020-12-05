@@ -15,7 +15,11 @@
             this.StatRunes = new List<string>();
             this.SkillsPriority = new List<string>();
             this.CounterChampions = new List<string>();
+            this.StartingItems = new List<string>();
+            this.ItemsWinRateKvp = new Dictionary<string, int>();
         }
+
+        public string Key { get; set; }
 
         public string Patch { get; set; }
 
@@ -58,5 +62,13 @@
         public int SkillsMatchesCount { get; set; }
 
         public ICollection<string> CounterChampions { get; set; }
+
+        public ICollection<string> StartingItems { get; set; }
+
+        public int StartingItemsWinRate { get; set; }
+
+        public int StartingItemsPickRate { get; set; }
+
+        public IDictionary<string, int> ItemsWinRateKvp { get; set; }
     }
 }
