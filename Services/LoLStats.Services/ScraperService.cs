@@ -68,7 +68,7 @@
             championPageDto.Role = (Role)Enum.Parse(typeof(Role), lane);
 
             // Tier
-            championPageDto.ChampionTier = championHeaderElement.TextContent[0].ToString();
+            championPageDto.ChampionTier = championHeaderElement.TextContent[0].ToString(); // TODO: Make work with S+ tier
 
             // Patch
             string patchPattern = "[0-9]+.[0-9]+";
