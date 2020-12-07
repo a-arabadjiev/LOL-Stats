@@ -1,8 +1,6 @@
-﻿namespace LoLStats.Data.Models
+﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    using LoLStats.Data.Common.Models;
-
-    public class SummonerSpell : BaseDeletableModel<int>
+    public class RiotApiSummonerSpell
     {
         public string Name { get; set; }
 
@@ -12,6 +10,6 @@
 
         public double BaseCooldown { get; set; }
 
-        public virtual Image Image { get; set; }
+        public RiotApiImage Image { get; set; }
     }
 }

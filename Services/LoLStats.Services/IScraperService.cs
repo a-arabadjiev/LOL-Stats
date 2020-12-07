@@ -2,7 +2,7 @@
 {
     using System.Collections.Concurrent;
 
-    using LoLStats.Services.Models;
+    using LoLStats.Services.Models.ScraperDtos;
 
     public interface IScraperService
     {

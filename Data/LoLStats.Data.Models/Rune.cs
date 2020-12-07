@@ -11,6 +11,8 @@
 
         public string Description { get; set; }
 
+        public Image Image { get; set; }
+
         public RunePath RunePath { get; set; }
 
         public int ChampionRunesId { get; set; }

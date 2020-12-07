@@ -1,8 +1,7 @@
-﻿namespace LoLStats.Services.Models
+﻿namespace LoLStats.Services.Models.ScraperDtos
 {
     using System.Collections.Generic;
 
-    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
 
     public class ChampionPageDto

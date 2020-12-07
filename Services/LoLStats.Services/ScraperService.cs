@@ -10,7 +10,7 @@
 
     using AngleSharp;
     using LoLStats.Data.Models.Enums;
-    using LoLStats.Services.Models;
+    using LoLStats.Services.Models.ScraperDtos;
     using RiotSharp;
 
     public class ScraperService : IScraperService

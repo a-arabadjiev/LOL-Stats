@@ -17,8 +17,6 @@
 
         public bool CostsPerSecond { get; set; }
 
-        public bool GeneratesResource { get; set; }
-
         public int Range { get; set; }
     }
 }

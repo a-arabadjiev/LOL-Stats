@@ -1,8 +1,9 @@
 ﻿namespace LoLStats.Services
-{ 
+{
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-
+    using LoLStats.Services.Models.RiotApiDtos;
     using RiotSharp;
 
     public class RiotSharpService : IRiotSharpService
@@ -19,6 +20,26 @@
         public string[] GetAllChampionKeys()
         {
             return this.api.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values.Select(x => x.Key).ToArray();
+        }
+
+        public ConcurrentBag<RiotApiChampionDto> ReturnChampionsData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ConcurrentBag<RiotApiChampionDto> ReturnItemsData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ConcurrentBag<RiotApiChampionDto> ReturnRunesData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ConcurrentBag<RiotApiChampionDto> ReturnSummonerSpellsData()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

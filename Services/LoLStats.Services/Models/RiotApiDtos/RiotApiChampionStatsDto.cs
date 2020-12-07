@@ -1,6 +1,6 @@
-﻿namespace LoLStats.Data.Models
+﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    public class ChampionStats
+    public class RiotApiChampionStatsDto
     {
         public double Armor { get; set; }
 
@@ -41,9 +41,5 @@
         public double SpellBlock { get; set; }
 
         public double SpellBlockPerLevel { get; set; }
-
-        public virtual Champion Champion { get; set; }
-
-        public int ChampionId { get; set; }
     }
 }

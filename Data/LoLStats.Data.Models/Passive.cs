@@ -7,5 +7,9 @@
         public string Description { get; set; }
 
         public Image Image { get; set; }
+
+        public virtual Champion Champion { get; set; }
+
+        public int ChampionId { get; set; }
     }
 }
