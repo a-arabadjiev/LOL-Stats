@@ -12,6 +12,6 @@
 
         public RunePath RunePath { get; set; }
 
-        public RiotApiImage Image { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

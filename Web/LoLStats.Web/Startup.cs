@@ -67,6 +67,7 @@
             // Application services
             services.AddTransient<IRiotSharpService, RiotSharpService>();
             services.AddTransient<IScraperService, ScraperService>();
+            services.AddTransient<ISanitizerService, SanitizerService>();
             services.AddTransient<IEmailSender, NullMessageSender>();
 
             // Application data services

@@ -10,6 +10,6 @@
 
         public double BaseCooldown { get; set; }
 
-        public RiotApiImage Image { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

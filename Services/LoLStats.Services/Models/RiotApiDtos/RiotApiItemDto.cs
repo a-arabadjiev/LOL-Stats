@@ -6,7 +6,7 @@
 
         public string Description { get; set; }
 
-        public RiotApiImage Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public bool Consumable { get; set; }
 

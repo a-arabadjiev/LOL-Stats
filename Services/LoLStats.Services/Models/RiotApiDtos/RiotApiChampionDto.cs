@@ -25,7 +25,7 @@
 
         public ICollection<RiotApiChampionTipDto> EnemyTips { get; set; }
 
-        public RiotApiImage Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public RiotApiChampionInfoDto Info { get; set; }
 

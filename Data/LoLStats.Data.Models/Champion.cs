@@ -38,7 +38,7 @@
 
         public double BanRate { get; set; }
 
-        public Image Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public string Tier { get; set; }
 

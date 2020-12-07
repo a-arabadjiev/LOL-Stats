@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using LoLStats.Data.Models;
+    using LoLStats.Data.Models.Enums;
 
     public class RiotApiSpellDto
     {
@@ -11,11 +11,13 @@
             this.PerLevelStats = new HashSet<RiotApiAbilityPerLevelDto>();
         }
 
+        public AbilityType AbilityType { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public RiotApiImage Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public string Tooltip { get; set; }
 

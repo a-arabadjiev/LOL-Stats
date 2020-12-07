@@ -11,7 +11,7 @@
 
         public string Description { get; set; }
 
-        public Image Image { get; set; }
+        public string ImageUrl { get; set; }
 
         public RunePath RunePath { get; set; }
 
