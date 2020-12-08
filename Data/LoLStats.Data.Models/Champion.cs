@@ -10,12 +10,12 @@
         public Champion()
         {
             this.BaseAbilities = new HashSet<BaseChampionAbility>();
-            this.ChampionAbilities = new HashSet<ChampionAbilities>();
+            this.BestAbilities = new HashSet<ChampionAbilities>();
             this.ChampionRoles = new HashSet<ChampionRole>();
-            this.ChampionSummonerSpells = new HashSet<ChampionSummonerSpells>();
-            this.ChampionStarterItems = new HashSet<ChampionStarterItems>();
-            this.ChampionItems = new HashSet<ChampionItems>();
-            this.ChampionRunes = new HashSet<ChampionRunes>();
+            this.BestSummonerSpells = new HashSet<ChampionSummonerSpells>();
+            this.BestStartingItems = new HashSet<ChampionStarterItems>();
+            this.BestItems = new HashSet<ChampionItems>();
+            this.BestRunes = new HashSet<ChampionRunes>();
             this.CounterChampions = new HashSet<Champion>();
             this.Tags = new HashSet<Tag>();
             this.AllyTips = new HashSet<AllyTip>();
@@ -44,11 +44,11 @@
 
         public bool IsFree { get; set; }
 
-        public virtual Passive Passive { get; set; }
+        public virtual ChampionPassive Passive { get; set; }
 
-        public virtual Info Info { get; set; }
+        public virtual ChampionInfo Info { get; set; }
 
-        public virtual ChampionStats ChampionStats { get; set; }
+        public virtual ChampionStats Stats { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
 
@@ -58,17 +58,17 @@
 
         public virtual ICollection<BaseChampionAbility> BaseAbilities { get; set; }
 
-        public virtual ICollection<ChampionAbilities> ChampionAbilities { get; set; }
+        public virtual ICollection<ChampionAbilities> BestAbilities { get; set; }
 
         public virtual ICollection<ChampionRole> ChampionRoles { get; set; }
 
-        public virtual ICollection<ChampionSummonerSpells> ChampionSummonerSpells { get; set; }
+        public virtual ICollection<ChampionSummonerSpells> BestSummonerSpells { get; set; }
 
-        public virtual ICollection<ChampionStarterItems> ChampionStarterItems { get; set; }
+        public virtual ICollection<ChampionStarterItems> BestStartingItems { get; set; }
 
-        public virtual ICollection<ChampionItems> ChampionItems { get; set; }
+        public virtual ICollection<ChampionItems> BestItems { get; set; }
 
-        public virtual ICollection<ChampionRunes> ChampionRunes { get; set; }
+        public virtual ICollection<ChampionRunes> BestRunes { get; set; }
 
         public virtual ICollection<Champion> CounterChampions { get; set; }
     }

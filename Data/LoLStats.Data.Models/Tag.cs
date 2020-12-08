@@ -7,8 +7,13 @@
 
     public class Tag : BaseDeletableModel<int>
     {
+        public Tag()
+        {
+            this.Champions = new HashSet<Champion>();
+        }
+
         public TagType Name { get; set; }
 
-        public ICollection<Champion> Champions { get; set; }
+        public virtual ICollection<Champion> Champions { get; set; }
     }
 }

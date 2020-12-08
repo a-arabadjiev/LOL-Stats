@@ -31,6 +31,9 @@
         {
             var championsBag = new ConcurrentBag<RiotApiChampionDto>();
 
+
+            var freeToPlayChampionIds = this.api.Champion.GetChampionRotationAsync(RiotSharp.Misc.Region.Euw).GetAwaiter().GetResult().FreeChampionIds;
+
             var champions = this.api.StaticData.Champions.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Champions.Values;
 
             foreach (var champion in champions)
@@ -38,6 +41,7 @@
                 RiotApiChampionDto championDto = new RiotApiChampionDto
                 {
                     Name = champion.Name,
+                    IsFree = freeToPlayChampionIds.Contains(champion.Id),
                     Key = champion.Key,
                     Title = champion.Title,
                     Lore = champion.Lore,

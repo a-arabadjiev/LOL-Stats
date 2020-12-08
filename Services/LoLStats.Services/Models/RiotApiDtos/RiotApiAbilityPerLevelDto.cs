@@ -1,6 +1,9 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    public class RiotApiAbilityPerLevelDto
+    using LoLStats.Data.Models;
+    using LoLStats.Services.Mapping;
+
+    public class RiotApiAbilityPerLevelDto : IMapTo<AbilityPerLevel>
     {
         public byte Level { get; set; }
 

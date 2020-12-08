@@ -9,6 +9,7 @@
         public ChampionRunes()
         {
             this.Runes = new HashSet<Rune>();
+            this.StatRunes = new HashSet<StatRune>();
         }
 
         public decimal PickRate { get; set; }

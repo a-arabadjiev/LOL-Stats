@@ -6,6 +6,6 @@
         Energy,
         Health,
         Fury,
-        Free,
+        None,
     }
 }

@@ -1,8 +1,9 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
     using LoLStats.Data.Models;
+    using LoLStats.Services.Mapping;
 
-    public class RiotApiChampionPassiveDto
+    public class RiotApiChampionPassiveDto : IMapTo<ChampionPassive>
     {
         public string Name { get; set; }
 

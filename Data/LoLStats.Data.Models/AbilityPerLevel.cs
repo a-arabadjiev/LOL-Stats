@@ -11,12 +11,12 @@
 
         public int Level { get; set; }
 
-        public int Cooldown { get; set; }
+        public double Cooldown { get; set; }
 
-        public int Cost { get; set; }
+        public double Cost { get; set; }
 
         public bool CostsPerSecond { get; set; }
 
-        public int Range { get; set; }
+        public double Range { get; set; }
     }
 }

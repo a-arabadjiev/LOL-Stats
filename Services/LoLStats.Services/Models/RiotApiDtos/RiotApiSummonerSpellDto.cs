@@ -1,6 +1,9 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    public class RiotApiSummonerSpellDto
+    using LoLStats.Data.Models;
+    using LoLStats.Services.Mapping;
+
+    public class RiotApiSummonerSpellDto : IMapTo<SummonerSpell>
     {
         public string Name { get; set; }
 

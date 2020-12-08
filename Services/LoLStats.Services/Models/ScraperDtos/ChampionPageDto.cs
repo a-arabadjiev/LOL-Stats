@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
 
+    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
+    using LoLStats.Services.Mapping;
 
-    public class ChampionPageDto
+    public class ChampionPageDto : IMapTo<Champion>
     {
         public ChampionPageDto()
         {

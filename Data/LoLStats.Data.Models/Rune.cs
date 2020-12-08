@@ -16,9 +16,5 @@
         public virtual RunePath RunePath { get; set; }
 
         public int RunePathId { get; set; }
-
-        public int ChampionRunesId { get; set; }
-
-        public virtual ChampionRunes ChampionRunes { get; set; }
     }
 }

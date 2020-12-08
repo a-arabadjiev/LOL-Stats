@@ -1,6 +1,9 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    public class RiotApiItemDto
+    using LoLStats.Data.Models;
+    using LoLStats.Services.Mapping;
+
+    public class RiotApiItemDto : IMapTo<Item>
     {
         public string Name { get; set; }
 

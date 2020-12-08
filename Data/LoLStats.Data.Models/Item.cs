@@ -17,9 +17,5 @@
         public int SellingCost { get; set; }
 
         public bool IsPurchasable { get; set; }
-
-        public int ChampionItemsId { get; set; }
-
-        public virtual ChampionItems ChampionItems { get; set; }
     }
 }

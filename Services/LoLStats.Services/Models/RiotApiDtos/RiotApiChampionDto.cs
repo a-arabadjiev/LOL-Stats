@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
 
+    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
+    using LoLStats.Services.Mapping;
 
-    public class RiotApiChampionDto
+    public class RiotApiChampionDto : IMapTo<Champion>
     {
         public RiotApiChampionDto()
         {
@@ -15,6 +17,8 @@
         }
 
         public string Name { get; set; }
+
+        public bool IsFree { get; set; }
 
         public string Key { get; set; }
 

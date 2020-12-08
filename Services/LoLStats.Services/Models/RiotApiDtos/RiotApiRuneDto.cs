@@ -1,8 +1,10 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
+    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
+    using LoLStats.Services.Mapping;
 
-    public class RiotApiRuneDto
+    public class RiotApiRuneDto : IMapTo<Rune>
     {
         public string Name { get; set; }
 

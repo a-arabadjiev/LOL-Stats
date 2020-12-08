@@ -1,6 +1,9 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    public class RiotApiChampionTipDto
+    using LoLStats.Data.Models;
+    using LoLStats.Services.Mapping;
+
+    public class RiotApiChampionTipDto : IMapTo<AllyTip>, IMapTo<EnemyTip>
     {
         public string Description { get; set; }
     }

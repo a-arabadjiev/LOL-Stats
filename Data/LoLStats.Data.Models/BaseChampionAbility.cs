@@ -10,7 +10,7 @@
     {
         public BaseChampionAbility()
         {
-            this.PerLevel = new HashSet<AbilityPerLevel>();
+            this.PerLevelStats = new HashSet<AbilityPerLevel>();
         }
 
         public AbilityType AbilityType { get; set; }
@@ -21,9 +21,9 @@
 
         public string Description { get; set; }
 
-        public CastingResource CastingResource { get; set; }
+        public byte MaxRank { get; set; }
 
-        public virtual ICollection<AbilityPerLevel> PerLevel { get; set; }
+        public virtual ICollection<AbilityPerLevel> PerLevelStats { get; set; }
 
         public int ChampionId { get; set; }
 

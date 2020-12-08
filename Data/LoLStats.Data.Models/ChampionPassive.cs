@@ -2,7 +2,7 @@
 {
     using LoLStats.Data.Common.Models;
 
-    public class Passive : BaseDeletableModel<int>
+    public class ChampionPassive : BaseDeletableModel<int>
     {
         public string Name { get; set; }
 

@@ -4,13 +4,8 @@
 
     using LoLStats.Data.Common.Models;
 
-    public class Info : BaseDeletableModel<int>
+    public class ChampionInfo : BaseDeletableModel<int>
     {
-        public Info()
-        {
-            this.Champions = new HashSet<Champion>();
-        }
-
         public byte Attack { get; set; }
 
         public byte Defense { get; set; }
@@ -19,6 +14,8 @@
 
         public byte Magic { get; set; }
 
-        public virtual ICollection<Champion> Champions { get; set; }
+        public virtual Champion Champion { get; set; }
+
+        public int ChampionId { get; set; }
     }
 }
