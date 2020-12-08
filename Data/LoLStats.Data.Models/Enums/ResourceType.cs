@@ -3,14 +3,17 @@
     public enum ResourceType
     {
         Mana,
-        None,
         Energy,
-        Shield,
+        BloodWell,
         Rage,
+        Courage,
+        Shield,
+        Fury,
         Ferocity,
         Heat,
-        Dragonfury,
-        Battlefury,
-        Wind,
+        Grit,
+        CrimsonRush,
+        Flow,
+        None,
     }
 }

@@ -8,9 +8,11 @@
 
         public bool IsKeystone { get; set; }
 
-        public string Description { get; set; }
+        public string ShortDescription { get; set; }
 
-        public RunePath RunePath { get; set; }
+        public string LongDescription { get; set; }
+
+        public RunePathType RunePath { get; set; }
 
         public string ImageUrl { get; set; }
     }

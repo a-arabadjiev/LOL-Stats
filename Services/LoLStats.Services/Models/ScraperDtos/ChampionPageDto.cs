@@ -40,11 +40,11 @@
 
         public int SummonerSpellsTotalMatches { get; set; }
 
-        public RunePath MainRuneTree { get; set; }
+        public RunePathType MainRuneTree { get; set; }
 
         public ICollection<string> PrimaryRunes { get; set; }
 
-        public RunePath SecondaryRuneTree { get; set; }
+        public RunePathType SecondaryRuneTree { get; set; }
 
         public ICollection<string> SecondaryRunes { get; set; }
 

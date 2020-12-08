@@ -1,6 +1,8 @@
 ﻿namespace LoLStats.Data.Models
 {
-    public class ChampionStats
+    using LoLStats.Data.Common.Models;
+
+    public class ChampionStats : BaseDeletableModel<int>
     {
         public double Armor { get; set; }
 

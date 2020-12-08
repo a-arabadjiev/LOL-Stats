@@ -4,14 +4,16 @@ using LoLStats.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LoLStats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201208114314_UpdateEntities")]
+    partial class UpdateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -875,7 +877,7 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RunePathId")
+                    b.Property<int>("RunePath")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -884,41 +886,7 @@ namespace LoLStats.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("RunePathId");
-
                     b.ToTable("Runes");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.RunePath", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("RunePath");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.Setting", b =>
@@ -1017,9 +985,6 @@ namespace LoLStats.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -1359,15 +1324,7 @@ namespace LoLStats.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LoLStats.Data.Models.RunePath", "RunePath")
-                        .WithMany("Runes")
-                        .HasForeignKey("RunePathId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("ChampionRunes");
-
-                    b.Navigation("RunePath");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.StatRune", b =>
@@ -1506,11 +1463,6 @@ namespace LoLStats.Data.Migrations
             modelBuilder.Entity("LoLStats.Data.Models.Info", b =>
                 {
                     b.Navigation("Champions");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.RunePath", b =>
-                {
-                    b.Navigation("Runes");
                 });
 #pragma warning restore 612, 618
         }

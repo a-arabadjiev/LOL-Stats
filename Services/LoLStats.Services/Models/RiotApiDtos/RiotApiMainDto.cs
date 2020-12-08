@@ -10,6 +10,6 @@
 
         public ICollection<RiotApiRuneDto> RuneDtos { get; set; }
 
-        public ICollection<RiotApiSummonerSpell> SummonerSpellDtos { get; set; }
+        public ICollection<RiotApiSummonerSpellDto> SummonerSpellDtos { get; set; }
     }
 }

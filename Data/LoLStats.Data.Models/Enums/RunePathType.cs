@@ -1,6 +1,6 @@
 ﻿namespace LoLStats.Data.Models.Enums
 {
-    public enum RunePath
+    public enum RunePathType
     {
         Precision,
         Domination,

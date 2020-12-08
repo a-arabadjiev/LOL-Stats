@@ -18,8 +18,8 @@
             this.ChampionRunes = new HashSet<ChampionRunes>();
             this.CounterChampions = new HashSet<Champion>();
             this.Tags = new HashSet<Tag>();
-            this.AllyTips = new HashSet<Tip>();
-            this.EnemyTips = new HashSet<Tip>();
+            this.AllyTips = new HashSet<AllyTip>();
+            this.EnemyTips = new HashSet<EnemyTip>();
         }
 
         public string Name { get; set; }
@@ -52,9 +52,9 @@
 
         public virtual ICollection<Tag> Tags { get; set; }
 
-        public virtual ICollection<Tip> AllyTips { get; set; }
+        public virtual ICollection<AllyTip> AllyTips { get; set; }
 
-        public virtual ICollection<Tip> EnemyTips { get; set; }
+        public virtual ICollection<EnemyTip> EnemyTips { get; set; }
 
         public virtual ICollection<BaseChampionAbility> BaseAbilities { get; set; }
 

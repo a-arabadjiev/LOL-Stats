@@ -13,7 +13,9 @@
 
         public string ImageUrl { get; set; }
 
-        public RunePath RunePath { get; set; }
+        public virtual RunePath RunePath { get; set; }
+
+        public int RunePathId { get; set; }
 
         public int ChampionRunesId { get; set; }
 

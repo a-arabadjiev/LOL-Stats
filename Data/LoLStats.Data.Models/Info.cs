@@ -2,7 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class Info
+    using LoLStats.Data.Common.Models;
+
+    public class Info : BaseDeletableModel<int>
     {
         public Info()
         {

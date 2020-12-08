@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
 
     public class RiotApiChampionDto

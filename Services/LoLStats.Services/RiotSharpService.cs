@@ -41,8 +41,8 @@
                     Key = champion.Key,
                     Title = champion.Title,
                     Lore = champion.Lore,
-                    ImageUrl = "http://ddragon.leagueoflegends.com/cdn/5.2.1/img/" + champion.Image.Group + "/" + champion.Image.Full,
-                    Partype = (ResourceType)Enum.Parse(typeof(ResourceType), champion.Partype),
+                    ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + champion.Image.Group + "/" + champion.Image.Full,
+                    Partype = (ResourceType)Enum.Parse(typeof(ResourceType), champion.Partype.Replace(" ", string.Empty)),
                     Info = new RiotApiChampionInfoDto
                     {
                         Attack = (byte)champion.Info.Attack,
@@ -54,7 +54,7 @@
                     {
                         Name = champion.Passive.Name,
                         Description = this.sanitizerService.SanitizeString(champion.Passive.Description),
-                        ImageUrl = "http://ddragon.leagueoflegends.com/cdn/5.2.1/img/" + champion.Passive.Image.Group + "/" + champion.Passive.Image.Full,
+                        ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + champion.Passive.Image.Group + "/" + champion.Passive.Image.Full,
                     },
                     Stats = new RiotApiChampionStatsDto
                     {
@@ -102,14 +102,14 @@
 
                     HashSet<RiotApiAbilityPerLevelDto> abilitiyPerLevelDtos = new HashSet<RiotApiAbilityPerLevelDto>();
 
-                    var rangeList = (dynamic)currentSpell.Range; // Cast object to dynamic object so it can become iteratable
+                    var rangeList = (dynamic)currentSpell.Range; // Cast object to dynamic so it can become iterable
 
                     // Fill abilityPerLevelDtos list
-                    for (int j = 1; j <= currentSpell.Cooldowns.Count; j++)
+                    for (int j = 0; j < currentSpell.Cooldowns.Count; j++)
                     {
                         var abilityPerLevelDto = new RiotApiAbilityPerLevelDto
                         {
-                            Level = (byte)j,
+                            Level = (byte)(j + 1),
                             Cooldown = currentSpell.Cooldowns[j],
                             Cost = currentSpell.Costs[j],
                             CostsPerSecond = currentSpell.CostType.Contains("per Second") ? true : false,
@@ -124,7 +124,7 @@
                         Name = currentSpell.Name,
                         AbilityType = (AbilityType)i,
                         Description = this.sanitizerService.SanitizeString(currentSpell.Description),
-                        ImageUrl = "http://ddragon.leagueoflegends.com/cdn/5.2.1/img/" + currentSpell.Image.Group + "/" + currentSpell.Image.Full,
+                        ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + currentSpell.Image.Group + "/" + currentSpell.Image.Full,
                         Tooltip = currentSpell.Tooltip,
                         MaxRank = (byte)currentSpell.MaxRank,
                         PerLevelStats = abilitiyPerLevelDtos,
@@ -137,19 +137,99 @@
             return championsBag;
         }
 
-        public ConcurrentBag<RiotApiChampionDto> ReturnItemsData()
+        public ConcurrentBag<RiotApiItemDto> ReturnItemsData()
         {
-            throw new System.NotImplementedException();
+            var itemsBag = new ConcurrentBag<RiotApiItemDto>();
+
+            var items = this.api.StaticData.Items.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().Items.Values;
+
+            foreach (var item in items)
+            {
+                RiotApiItemDto itemDto = new RiotApiItemDto
+                {
+                    Name = item.Name,
+                    Description = this.sanitizerService.SanitizeString(item.Description),
+                    Consumable = item.Consumed,
+                    Depth = (byte)item.Depth,
+                    HideFromAll = item.HideFromAll,
+                    ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + item.Image.Group + "/" + item.Image.Full,
+                    FullCost = item.Gold.TotalPrice,
+                    IndividualCost = item.Gold.BasePrice,
+                    SellingCost = item.Gold.SellingPrice,
+                };
+
+                itemsBag.Add(itemDto);
+            }
+
+            return itemsBag;
         }
 
-        public ConcurrentBag<RiotApiChampionDto> ReturnRunesData()
+        public ConcurrentBag<RiotApiRunePathDto> ReturnRunesData()
         {
-            throw new System.NotImplementedException();
+            var runePathsBag = new ConcurrentBag<RiotApiRunePathDto>();
+
+            var runes = this.api.StaticData.ReforgedRunes.GetAllAsync(this.latestVersion).GetAwaiter().GetResult();
+
+            var runesBag = new ConcurrentBag<RiotApiRuneDto>();
+
+            foreach (var runeTree in runes)
+            {
+                for (int i = 0; i < runeTree.Slots.Count; i++)
+                {
+                    var runeTreeSlots = runeTree.Slots;
+
+                    foreach (var rune in runeTreeSlots[i].Runes)
+                    {
+                        RiotApiRuneDto runeDto = new RiotApiRuneDto
+                        {
+                            Name = rune.Name,
+                            RunePath = (RunePathType)Enum.Parse(typeof(RunePathType), runeTree.Name),
+                            ShortDescription = this.sanitizerService.SanitizeString(rune.ShortDescription),
+                            LongDescription = this.sanitizerService.SanitizeString(rune.LongDescription),
+                            ImageUrl = "https://ddragon.canisback.com/img/" + rune.Icon,
+                            IsKeystone = i == 0 ? true : false,
+                        };
+
+                        runesBag.Add(runeDto);
+                    }
+                }
+
+                RiotApiRunePathDto runePathDto = new RiotApiRunePathDto
+                {
+                    Name = (RunePathType)Enum.Parse(typeof(RunePathType), runeTree.Name),
+                    ImageUrl = "https://ddragon.canisback.com/img/" + runeTree.Icon,
+                    RuneDtos = runesBag.ToHashSet(),
+                };
+
+                runePathsBag.Add(runePathDto);
+                runesBag.Clear();
+            }
+
+            return runePathsBag;
         }
 
-        public ConcurrentBag<RiotApiChampionDto> ReturnSummonerSpellsData()
+        public ConcurrentBag<RiotApiSummonerSpellDto> ReturnSummonerSpellsData()
         {
-            throw new System.NotImplementedException();
+            var summonerSpellsBag = new ConcurrentBag<RiotApiSummonerSpellDto>();
+
+            var summonerSpells = this.api.StaticData.SummonerSpells.GetAllAsync(this.latestVersion).GetAwaiter().GetResult().SummonerSpells.Values;
+
+            foreach (var spell in summonerSpells)
+            {
+                RiotApiSummonerSpellDto summonerSpell = new RiotApiSummonerSpellDto
+                {
+                    Name = spell.Name,
+                    Key = spell.Key,
+                    Description = this.sanitizerService.SanitizeString(spell.Description),
+                    Tooltip = spell.Tooltip,
+                    ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + spell.Image.Group + "/" + spell.Image.Full,
+                    BaseCooldown = spell.Cooldowns[0],
+                };
+
+                summonerSpellsBag.Add(summonerSpell);
+            }
+
+            return summonerSpellsBag;
         }
     }
 }

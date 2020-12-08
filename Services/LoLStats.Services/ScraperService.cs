@@ -133,8 +133,8 @@
             string mainRuneTree = runeTrees[0].ToString();
             string secondaryRuneTree = runeTrees[1].ToString();
 
-            championPageDto.MainRuneTree = (RunePath)Enum.Parse(typeof(RunePath), mainRuneTree);
-            championPageDto.SecondaryRuneTree = (RunePath)Enum.Parse(typeof(RunePath), secondaryRuneTree);
+            championPageDto.MainRuneTree = (RunePathType)Enum.Parse(typeof(RunePathType), mainRuneTree);
+            championPageDto.SecondaryRuneTree = (RunePathType)Enum.Parse(typeof(RunePathType), secondaryRuneTree);
 
             // RunesWinRate
             string runeWinRatePattern = "(?<=Build)[0-9.]+";

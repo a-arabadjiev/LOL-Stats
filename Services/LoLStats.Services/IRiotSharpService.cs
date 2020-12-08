@@ -10,10 +10,10 @@
 
         ConcurrentBag<RiotApiChampionDto> ReturnChampionsData();
 
-        ConcurrentBag<RiotApiChampionDto> ReturnItemsData();
+        ConcurrentBag<RiotApiItemDto> ReturnItemsData();
 
-        ConcurrentBag<RiotApiChampionDto> ReturnRunesData();
+        ConcurrentBag<RiotApiRunePathDto> ReturnRunesData();
 
-        ConcurrentBag<RiotApiChampionDto> ReturnSummonerSpellsData();
+        ConcurrentBag<RiotApiSummonerSpellDto> ReturnSummonerSpellsData();
     }
 }
