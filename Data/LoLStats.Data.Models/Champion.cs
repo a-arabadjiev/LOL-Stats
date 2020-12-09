@@ -1,11 +1,12 @@
 ﻿namespace LoLStats.Data.Models
 {
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using LoLStats.Data.Common.Models;
     using LoLStats.Data.Models.Enums;
 
-    public class Champion : BaseDeletableModel<int>
+    public class Champion : BaseDeletableModel<string>
     {
         public Champion()
         {
@@ -23,8 +24,6 @@
         }
 
         public string Name { get; set; }
-
-        public string Key { get; set; }
 
         public string Title { get; set; }
 
@@ -46,9 +45,18 @@
 
         public virtual ChampionPassive Passive { get; set; }
 
+        [ForeignKey("Passive")]
+        public int PassiveId { get; set; }
+
         public virtual ChampionInfo Info { get; set; }
 
+        [ForeignKey("Info")]
+        public int InfoId { get; set; }
+
         public virtual ChampionStats Stats { get; set; }
+
+        [ForeignKey("Stats")]
+        public int StatsId { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
 

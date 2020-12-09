@@ -46,6 +46,6 @@
 
         public virtual Champion Champion { get; set; }
 
-        public int ChampionId { get; set; }
+        public string ChampionId { get; set; }
     }
 }

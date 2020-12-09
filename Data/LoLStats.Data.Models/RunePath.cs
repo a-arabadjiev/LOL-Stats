@@ -1,11 +1,12 @@
 ﻿namespace LoLStats.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using LoLStats.Data.Common.Models;
     using LoLStats.Data.Models.Enums;
 
-    public class RunePath : BaseDeletableModel<int>
+    public class RunePath : BaseDeletableModel<string>
     {
         public RunePath()
         {

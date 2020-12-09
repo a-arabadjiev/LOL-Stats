@@ -16,108 +16,80 @@
 
     public class DbService : IDbService
     {
-        private readonly IDeletableEntityRepository<AbilityPerLevel> abilitiesPerLevelRepository;
-        private readonly IDeletableEntityRepository<AllyTip> allyTipsRepository;
-        private readonly IDeletableEntityRepository<BaseChampionAbility> baseChampionAbilitiesRepository;
         private readonly IDeletableEntityRepository<Champion> championsRepository;
         private readonly IDeletableEntityRepository<ChampionAbilities> championAbilitiesRepository;
         private readonly IDeletableEntityRepository<ChampionItems> championItemsRepository;
         private readonly IDeletableEntityRepository<ChampionRole> championRolesRepository;
         private readonly IDeletableEntityRepository<ChampionRunes> championRunesRepository;
         private readonly IDeletableEntityRepository<ChampionStarterItems> championStarterItemsRepository;
-        private readonly IDeletableEntityRepository<ChampionStats> championStatsRepository;
         private readonly IDeletableEntityRepository<ChampionSummonerSpells> championSummonerSpellsRepository;
-        private readonly IDeletableEntityRepository<EnemyTip> enemyTipsRepository;
-        private readonly IDeletableEntityRepository<ChampionInfo> championInfoRepository;
         private readonly IDeletableEntityRepository<Item> itemsRepository;
-        private readonly IDeletableEntityRepository<ChampionPassive> championPassivesRepository;
         private readonly IDeletableEntityRepository<RunePath> runePathsRepository;
         private readonly IDeletableEntityRepository<Rune> runesRepository;
-        private readonly IDeletableEntityRepository<StatRune> statRunesRepository;
         private readonly IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository;
-        private readonly IDeletableEntityRepository<Tag> tagsRepository;
+        private readonly IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository;
         private readonly IRiotSharpService riotSharpService;
         private readonly IScraperService scraperService;
 
         public DbService(
             IRiotSharpService riotSharpService,
             IScraperService scraperService,
-            IDeletableEntityRepository<AbilityPerLevel> abilitiesPerLevelRepository,
-            IDeletableEntityRepository<AllyTip> allyTipsRepository,
-            IDeletableEntityRepository<BaseChampionAbility> baseChampionAbilitiesRepository,
             IDeletableEntityRepository<Champion> championsRepository,
             IDeletableEntityRepository<ChampionAbilities> championAbilitiesRepository,
             IDeletableEntityRepository<ChampionItems> championItemsRepository,
             IDeletableEntityRepository<ChampionRole> championRolesRepository,
             IDeletableEntityRepository<ChampionRunes> championRunesRepository,
             IDeletableEntityRepository<ChampionStarterItems> championStarterItemsRepository,
-            IDeletableEntityRepository<ChampionStats> championStatsRepository,
             IDeletableEntityRepository<ChampionSummonerSpells> championSummonerSpellsRepository,
-            IDeletableEntityRepository<EnemyTip> enemyTipsRepository,
-            IDeletableEntityRepository<ChampionInfo> championInfoRepository,
             IDeletableEntityRepository<Item> itemsRepository,
-            IDeletableEntityRepository<ChampionPassive> championPassivesRepository,
             IDeletableEntityRepository<RunePath> runePathsRepository,
             IDeletableEntityRepository<Rune> runesRepository,
-            IDeletableEntityRepository<StatRune> statRunesRepository,
             IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository,
-            IDeletableEntityRepository<Tag> tagsRepository)
+            IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository)
         {
             this.riotSharpService = riotSharpService;
             this.scraperService = scraperService;
-            this.abilitiesPerLevelRepository = abilitiesPerLevelRepository;
-            this.allyTipsRepository = allyTipsRepository;
-            this.baseChampionAbilitiesRepository = baseChampionAbilitiesRepository;
             this.championsRepository = championsRepository;
             this.championAbilitiesRepository = championAbilitiesRepository;
             this.championItemsRepository = championItemsRepository;
             this.championRolesRepository = championRolesRepository;
             this.championRunesRepository = championRunesRepository;
             this.championStarterItemsRepository = championStarterItemsRepository;
-            this.championStatsRepository = championStatsRepository;
             this.championSummonerSpellsRepository = championSummonerSpellsRepository;
-            this.enemyTipsRepository = enemyTipsRepository;
-            this.championInfoRepository = championInfoRepository;
             this.itemsRepository = itemsRepository;
-            this.championPassivesRepository = championPassivesRepository;
             this.runePathsRepository = runePathsRepository;
             this.runesRepository = runesRepository;
-            this.statRunesRepository = statRunesRepository;
             this.summonerSpellsRepository = summonerSpellsRepository;
-            this.tagsRepository = tagsRepository;
+            this.statRuneRowsRepository = statRuneRowsRepository;
         }
 
-        public async Task PopulateDatabaseWithData()
+        public async Task AddBaseGameData()
         {
-            var championDtos = this.riotSharpService.ReturnChampionsData().OrderBy(x => x.Key).ToArray();
-            var itemDtos = this.riotSharpService.ReturnChampionsData().ToArray();
-            var runeDtos = this.riotSharpService.ReturnChampionsData().ToArray();
-            var summonerSpellDtos = this.riotSharpService.ReturnChampionsData().ToArray();
-            var championPageDtos = this.scraperService.ReturnChampionPageInfo().OrderBy(x => x.Key).ToArray();
+            var championDtos = this.riotSharpService.ReturnChampionsData().OrderBy(x => x.Id).ToArray();
+            var itemDtos = this.riotSharpService.ReturnItemsData().ToArray();
+            var runeTreeDtos = this.riotSharpService.ReturnRunesData().ToArray();
+            var summonerSpellDtos = this.riotSharpService.ReturnSummonerSpellsData().ToArray();
 
+            // Add Champions
             for (int i = 0; i < championDtos.Length; i++)
             {
                 var championDto = championDtos[i];
-                var championPageDto = championPageDtos[i];
 
                 var champion = new Champion
                 {
                     Name = championDto.Name,
-                    Key = championDto.Key,
+                    Id = championDto.Id,
                     Title = championDto.Title,
                     Lore = championDto.Lore,
                     ImageUrl = championDto.ImageUrl,
-                    Tier = championPageDto.ChampionTier,
                     Partype = championDto.Partype,
-                    PickRate = championPageDto.ChampionPickRate,
-                    WinRate = championPageDto.ChampionWinRate,
-                    BanRate = championPageDto.ChampionBanRate,
+                    IsFree = championDto.IsFree,
                     Passive = new ChampionPassive
                     {
                         Name = championDto.Passive.Name,
                         Description = championDto.Passive.Description,
                         ImageUrl = championDto.Passive.ImageUrl,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     },
                     Info = new ChampionInfo
                     {
@@ -125,7 +97,7 @@
                         Defense = championDto.Info.Defense,
                         Magic = championDto.Info.Magic,
                         Difficulty = championDto.Info.Difficulty,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     },
                     Stats = new ChampionStats
                     {
@@ -149,9 +121,8 @@
                         MpRegenPerLevel = championDto.Stats.Armor,
                         SpellBlock = championDto.Stats.Armor,
                         SpellBlockPerLevel = championDto.Stats.Armor,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     },
-                    IsFree = championDto.IsFree,
                 };
 
                 foreach (var tipDto in championDto.AllyTips)
@@ -159,7 +130,7 @@
                     var allyTip = new AllyTip
                     {
                         Description = tipDto.Description,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     };
                     champion.AllyTips.Add(allyTip);
                 }
@@ -169,7 +140,7 @@
                     var enemyTip = new EnemyTip
                     {
                         Description = tipDto.Description,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     };
                     champion.EnemyTips.Add(enemyTip);
                 }
@@ -182,11 +153,12 @@
                     var championAbility = new BaseChampionAbility
                     {
                         Name = spellDto.Name,
+                        Id = spellDto.Id,
                         Description = spellDto.Description,
                         AbilityType = spellDto.AbilityType,
                         ImageUrl = spellDto.ImageUrl,
                         MaxRank = spellDto.MaxRank,
-                        ChampionId = i,
+                        ChampionId = championDto.Id,
                     };
 
                     foreach (var stat in spellDto.PerLevelStats)
@@ -194,7 +166,7 @@
                         var perLevel = new AbilityPerLevel
                         {
                             Level = stat.Level,
-                            BaseChampionAbilityId = j,
+                            BaseChampionAbilityId = spellDto.Id,
                             Cooldown = stat.Cooldown,
                             Range = stat.Range,
                             Cost = stat.Cost,
@@ -203,19 +175,118 @@
 
                         championAbility.PerLevelStats.Add(perLevel);
                     }
+
+                    champion.BaseAbilities.Add(championAbility);
                 }
 
-                var bestChampionItems = new ChampionStarterItems
+                foreach (var tagDto in championDto.Tags)
                 {
-                    ChampionId = i,
-                    PickRate = championPageDto.StartingItemsPickRate,
-                    WinRate = championPageDto.StartingItemsWinRate,
-                };
-                foreach (var item in championPageDto.StartingItems)
-                {
-                    //bestChampionItems.Items.Add(item);
+                    var tag = new Tag
+                    {
+                        Name = tagDto.Name,
+                    };
+
+                    champion.Tags.Add(tag);
                 }
+
+                await this.championsRepository.AddAsync(champion);
             }
+
+            await this.championsRepository.SaveChangesAsync();
+
+            // Add Items
+            foreach (var itemDto in itemDtos)
+            {
+                var item = new Item
+                {
+                    Name = itemDto.Name,
+                    Description = itemDto.Description,
+                    FullCost = itemDto.FullCost,
+                    IndividualCost = itemDto.IndividualCost,
+                    SellingCost = itemDto.SellingCost,
+                    ImageUrl = itemDto.ImageUrl,
+                    IsPurchasable = itemDto.HideFromAll,
+                };
+
+                await this.itemsRepository.AddAsync(item);
+            }
+
+            await this.itemsRepository.SaveChangesAsync();
+
+            // Add Summoner Spells
+            foreach (var spellDto in summonerSpellDtos)
+            {
+                var summonerSpell = new SummonerSpell
+                {
+                    Name = spellDto.Name,
+                    Description = spellDto.Description,
+                    BaseCooldown = spellDto.BaseCooldown,
+                    ImageUrl = spellDto.ImageUrl,
+                    Key = spellDto.Key,
+                    Tooltip = spellDto.Tooltip,
+                };
+
+                await this.summonerSpellsRepository.AddAsync(summonerSpell);
+            }
+
+            await this.summonerSpellsRepository.SaveChangesAsync();
+
+            // Add Runes
+            foreach (var runeTreeDto in runeTreeDtos)
+            {
+                var runeTree = new RunePath
+                {
+                    Name = runeTreeDto.Name,
+                    ImageUrl = runeTreeDto.ImageUrl,
+                };
+
+                foreach (var runeDto in runeTreeDto.RuneDtos)
+                {
+                    var rune = new Rune
+                    {
+                        Name = runeDto.Name,
+                        LongDescription = runeDto.LongDescription,
+                        ShortDescription = runeDto.ShortDescription,
+                        ImageUrl = runeDto.ImageUrl,
+                        IsKeystone = runeDto.IsKeystone,
+                        RunePathId = runeTree.Name.ToString(),
+                    };
+
+                    runeTree.Runes.Add(rune);
+                }
+
+                await this.runePathsRepository.AddAsync(runeTree);
+            }
+
+            await this.runePathsRepository.SaveChangesAsync();
+
+            // Add StatRunes
+            string[] offenseRuneValues = { "Adaptive Force +9", "+9% Attack Speed", "Ability Haste +8 (Based on level)" };
+            string[] flexRuneValues = { "Adaptive Force +9", "+6 Armor", "+8 Magic Resist" };
+            string[] defenseRuneValues = { "+15-90 Health (Based on level)", "+6 Armor", "+8 Magic Resist" };
+
+            string[][] valueRows = { offenseRuneValues, flexRuneValues, defenseRuneValues };
+
+            for (int i = 0; i < 3; i++)
+            {
+                var runeRow = new StatRuneRow
+                {
+                    Type = (StatRuneType)i,
+                    Id = ((StatRuneType)i).ToString(),
+                };
+                for (int j = 0; j < 3; j++)
+                {
+                    runeRow.Runes.Add(new StatRune
+                    {
+                        RowId = runeRow.Type.ToString(),
+                        Description = valueRows[i][j],
+                    });
+                }
+
+                await this.statRuneRowsRepository.AddAsync(runeRow);
+            }
+
+            await this.statRuneRowsRepository.SaveChangesAsync();
         }
     }
 }

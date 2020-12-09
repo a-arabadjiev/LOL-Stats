@@ -9,12 +9,14 @@
 
         public bool IsKeystone { get; set; }
 
-        public string Description { get; set; }
+        public string LongDescription { get; set; }
+
+        public string ShortDescription { get; set; }
 
         public string ImageUrl { get; set; }
 
         public virtual RunePath RunePath { get; set; }
 
-        public int RunePathId { get; set; }
+        public string RunePathId { get; set; }
     }
 }

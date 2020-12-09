@@ -16,11 +16,13 @@
     {
         private readonly IScraperService scraperService;
         private readonly IRiotSharpService riotSharpService;
+        private readonly IDbService dbService;
 
-        public HomeController(IScraperService scraperService, IRiotSharpService riotSharpService)
+        public HomeController(IScraperService scraperService, IRiotSharpService riotSharpService, IDbService dbService)
         {
             this.scraperService = scraperService;
             this.riotSharpService = riotSharpService;
+            this.dbService = dbService;
         }
 
         public IActionResult Index()
@@ -28,25 +30,10 @@
             return this.View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
             // Testing
-            var championsData = this.riotSharpService.ReturnChampionsData();
-            var itemsData = this.riotSharpService.ReturnItemsData();
-            var runesData = this.riotSharpService.ReturnRunesData();
-            var summonerSpellsData = this.riotSharpService.ReturnSummonerSpellsData();
-
-            foreach (var item in itemsData)
-            {
-            }
-
-            foreach (var runePath in runesData)
-            {
-            }
-
-            foreach (var summonerSpell in summonerSpellsData)
-            {
-            }
+            await this.dbService.AddBaseGameData();
 
             return this.View();
         }

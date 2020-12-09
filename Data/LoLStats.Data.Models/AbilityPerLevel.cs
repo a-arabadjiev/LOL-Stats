@@ -5,7 +5,7 @@
 
     public class AbilityPerLevel : BaseDeletableModel<int>
     {
-        public int BaseChampionAbilityId { get; set; }
+        public string BaseChampionAbilityId { get; set; }
 
         public BaseChampionAbility Ability { get; set; }
 

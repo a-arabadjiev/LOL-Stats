@@ -2,11 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using LoLStats.Data.Common.Models;
     using LoLStats.Data.Models.Enums;
 
-    public class BaseChampionAbility : BaseDeletableModel<int>
+    public class BaseChampionAbility : BaseDeletableModel<string>
     {
         public BaseChampionAbility()
         {
@@ -25,7 +26,7 @@
 
         public virtual ICollection<AbilityPerLevel> PerLevelStats { get; set; }
 
-        public int ChampionId { get; set; }
+        public string ChampionId { get; set; }
 
         public Champion Champion { get; set; }
     }

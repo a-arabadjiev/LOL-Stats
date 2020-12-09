@@ -17,7 +17,7 @@
 
         public RiotSharpService(ISanitizerService sanitizerService)
         {
-            this.api = RiotApi.GetDevelopmentInstance("RGAPI-46dba1f0-2bbc-4b15-95c3-75f9bab62f9b");
+            this.api = RiotApi.GetDevelopmentInstance("RGAPI-53a0689c-15c9-442a-b3e1-9b514fd0dec9");
             this.latestVersion = this.api.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
             this.sanitizerService = sanitizerService;
         }
@@ -42,7 +42,7 @@
                 {
                     Name = champion.Name,
                     IsFree = freeToPlayChampionIds.Contains(champion.Id),
-                    Key = champion.Key,
+                    Id = champion.Key,
                     Title = champion.Title,
                     Lore = champion.Lore,
                     ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + champion.Image.Group + "/" + champion.Image.Full,
@@ -127,6 +127,7 @@
                     {
                         Name = currentSpell.Name,
                         AbilityType = (AbilityType)i,
+                        Id = championDto.Id + ((AbilityType)i).ToString(),
                         Description = this.sanitizerService.SanitizeString(currentSpell.Description),
                         ImageUrl = $"http://ddragon.leagueoflegends.com/cdn/{this.latestVersion}/img/" + currentSpell.Image.Group + "/" + currentSpell.Image.Full,
                         Tooltip = currentSpell.Tooltip,
@@ -201,6 +202,7 @@
                 RiotApiRunePathDto runePathDto = new RiotApiRunePathDto
                 {
                     Name = (RunePathType)Enum.Parse(typeof(RunePathType), runeTree.Name),
+                    Id = runeTree.Name,
                     ImageUrl = "https://ddragon.canisback.com/img/" + runeTree.Icon,
                     RuneDtos = runesBag.ToHashSet(),
                 };

@@ -6,7 +6,9 @@
     public class StatRune : BaseDeletableModel<int>
     {
         // TODO
-        public StatRuneType Type { get; set; }
+        public virtual StatRuneRow Row { get; set; }
+
+        public string RowId { get; set; }
 
         public string Description { get; set; }
     }
