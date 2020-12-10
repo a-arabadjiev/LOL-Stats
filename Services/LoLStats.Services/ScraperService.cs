@@ -30,7 +30,7 @@
         {
             var concurrentBag = new ConcurrentBag<ChampionPageDto>();
 
-            var championKeys = this.riotSharpService.GetAllChampionKeys();
+            var championKeys = this.riotSharpService.GetAllChampionKeys().Where(x => x != "Rell").ToArray();
 
             Parallel.For(0, championKeys.Length, (i) =>
             {
@@ -65,7 +65,7 @@
 
             string lane = Regex.Match(championHeaderElement.TextContent, lanePattern).ToString();
 
-            championPageDto.Role = (Role)Enum.Parse(typeof(Role), lane);
+            championPageDto.Role = (RoleType)Enum.Parse(typeof(RoleType), lane);
 
             // Tier
             championPageDto.ChampionTier = championHeaderElement.TextContent[0].ToString(); // TODO: Make work with S+ tier
@@ -133,8 +133,8 @@
             string mainRuneTree = runeTrees[0].ToString();
             string secondaryRuneTree = runeTrees[1].ToString();
 
-            championPageDto.MainRuneTree = (RunePathType)Enum.Parse(typeof(RunePathType), mainRuneTree);
-            championPageDto.SecondaryRuneTree = (RunePathType)Enum.Parse(typeof(RunePathType), secondaryRuneTree);
+            championPageDto.MainRuneTree = (RuneTreeType)Enum.Parse(typeof(RuneTreeType), mainRuneTree);
+            championPageDto.SecondaryRuneTree = (RuneTreeType)Enum.Parse(typeof(RuneTreeType), secondaryRuneTree);
 
             // RunesWinRate
             string runeWinRatePattern = "(?<=Build)[0-9.]+";
@@ -193,8 +193,21 @@
                 {
                     foreach (var activeRuneElement in runeRowElement.Children.Where(x => x.ClassName == "shard shard-active"))
                     {
-                        string runeName = Regex.Match(activeRuneElement.InnerHtml, statRuneNamePatter).ToString();
-                        championPageDto.StatRunes.Add(runeName);
+                        string[] statRuneValues = { "Attack", "Speed", "Armor", "Resist", "Health", "CDR"};
+
+                        string runeDescription = Regex.Match(activeRuneElement.InnerHtml, statRuneNamePatter).ToString();
+
+                        string[] descriptionWords = runeDescription.Split(" ");
+
+                        for (int i = 0; i < statRuneValues.Length; i++)
+                        {
+                            string value = statRuneValues[i];
+
+                            if (descriptionWords[descriptionWords.Length - 2] == value)
+                            {
+                                championPageDto.StatRunes.Add((StatRuneType)i);
+                            }
+                        }
                     }
                 }
             }

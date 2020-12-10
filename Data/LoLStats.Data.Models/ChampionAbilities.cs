@@ -11,9 +11,9 @@
             this.Abilities = new HashSet<BaseChampionAbility>();
         }
 
-        public decimal PickRate { get; set; }
+        public int TotalMatches { get; set; }
 
-        public decimal WinRate { get; set; }
+        public double WinRate { get; set; }
 
         public string ChampionId { get; set; }
 

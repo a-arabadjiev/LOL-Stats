@@ -14,7 +14,7 @@
 
         public string LongDescription { get; set; }
 
-        public RunePathType RunePath { get; set; }
+        public RuneTreeType RunePath { get; set; }
 
         public string ImageUrl { get; set; }
     }

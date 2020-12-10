@@ -17,8 +17,6 @@
 
         public virtual Champion Champion { get; set; }
 
-        public decimal PickRate { get; set; }
-
-        public decimal WinRate { get; set; }
+        public int WinRate { get; set; }
     }
 }

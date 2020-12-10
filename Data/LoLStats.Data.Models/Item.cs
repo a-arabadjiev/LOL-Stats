@@ -1,9 +1,16 @@
 ﻿namespace LoLStats.Data.Models
 {
     using LoLStats.Data.Common.Models;
+    using System.Collections.Generic;
 
     public class Item : BaseDeletableModel<int>
     {
+        public Item()
+        {
+            this.ChampionStarterItems = new HashSet<ChampionStarterItems>();
+            this.ChampionItems = new HashSet<ChampionItems>();
+        }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -17,5 +24,9 @@
         public int SellingCost { get; set; }
 
         public bool IsPurchasable { get; set; }
+
+        public virtual ICollection<ChampionStarterItems> ChampionStarterItems { get; set; }
+
+        public virtual ICollection<ChampionItems> ChampionItems { get; set; }
     }
 }

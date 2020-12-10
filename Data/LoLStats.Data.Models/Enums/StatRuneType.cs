@@ -2,8 +2,11 @@
 {
     public enum StatRuneType
     {
-        Offense,
-        Flex,
-        Defense,
+        AdaptiveDamage,
+        AttackSpeed,
+        Armor,
+        MagicResist,
+        Health,
+        AbilityHaste,
     }
 }

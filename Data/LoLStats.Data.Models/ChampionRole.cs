@@ -5,11 +5,17 @@
 
     public class ChampionRole : BaseDeletableModel<int>
     {
-        public decimal PickRate { get; set; }
+        public RoleType Role { get; set; }
 
-        public decimal WinRate { get; set; }
+        public string Tier { get; set; }
 
-        public Role Role { get; set; }
+        public double PickRate { get; set; }
+
+        public double WinRate { get; set; }
+
+        public int TotalMatches { get; set; }
+
+        public double BanRate { get; set; }
 
         public string ChampionId { get; set; }
 

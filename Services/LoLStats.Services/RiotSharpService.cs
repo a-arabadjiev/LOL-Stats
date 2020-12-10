@@ -4,7 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Text.RegularExpressions;
     using LoLStats.Data.Models.Enums;
     using LoLStats.Services.Models.RiotApiDtos;
     using RiotSharp;
@@ -153,7 +153,7 @@
                 RiotApiItemDto itemDto = new RiotApiItemDto
                 {
                     Name = item.Name,
-                    Description = this.sanitizerService.SanitizeString(item.Description),
+                    Description = this.sanitizerService.SanitizeItemDescription(item.Description),
                     Consumable = item.Consumed,
                     Depth = (byte)item.Depth,
                     HideFromAll = item.HideFromAll,
@@ -188,7 +188,7 @@
                         RiotApiRuneDto runeDto = new RiotApiRuneDto
                         {
                             Name = rune.Name,
-                            RunePath = (RunePathType)Enum.Parse(typeof(RunePathType), runeTree.Name),
+                            RunePath = (RuneTreeType)Enum.Parse(typeof(RuneTreeType), runeTree.Name),
                             ShortDescription = this.sanitizerService.SanitizeString(rune.ShortDescription),
                             LongDescription = this.sanitizerService.SanitizeString(rune.LongDescription),
                             ImageUrl = "https://ddragon.canisback.com/img/" + rune.Icon,
@@ -201,7 +201,7 @@
 
                 RiotApiRunePathDto runePathDto = new RiotApiRunePathDto
                 {
-                    Name = (RunePathType)Enum.Parse(typeof(RunePathType), runeTree.Name),
+                    Name = (RuneTreeType)Enum.Parse(typeof(RuneTreeType), runeTree.Name),
                     Id = runeTree.Name,
                     ImageUrl = "https://ddragon.canisback.com/img/" + runeTree.Icon,
                     RuneDtos = runesBag.ToHashSet(),

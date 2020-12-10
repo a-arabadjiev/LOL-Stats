@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using LoLStats.Data.Common.Models;
+    using LoLStats.Data.Models.Enums;
 
     public class ChampionRunes : BaseDeletableModel<int>
     {
@@ -12,9 +13,13 @@
             this.StatRunes = new HashSet<StatRune>();
         }
 
-        public decimal PickRate { get; set; }
+        public int TotalMatches { get; set; }
 
-        public decimal WinRate { get; set; }
+        public double WinRate { get; set; }
+
+        public RuneTreeType MainRuneTree { get; set; }
+
+        public RuneTreeType SecondaryRuneTree { get; set; }
 
         public string ChampionId { get; set; }
 

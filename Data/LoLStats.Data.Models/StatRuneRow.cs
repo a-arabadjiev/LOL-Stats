@@ -12,7 +12,7 @@
             this.Runes = new HashSet<StatRune>();
         }
 
-        public StatRuneType Type { get; set; }
+        public StatRuneTreeType Type { get; set; }
 
         public virtual ICollection<StatRune> Runes { get; set; }
     }

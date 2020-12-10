@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoLStats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201209142306_FinishBaseEntities")]
-    partial class FinishBaseEntities
+    [Migration("20201210003426_EditChampionStatisticsEntities")]
+    partial class EditChampionStatisticsEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,96 @@ namespace LoLStats.Data.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("BaseChampionAbilityChampionAbilities", b =>
+                {
+                    b.Property<string>("AbilitiesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ChampionAbilitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AbilitiesId", "ChampionAbilitiesId");
+
+                    b.HasIndex("ChampionAbilitiesId");
+
+                    b.ToTable("BaseChampionAbilityChampionAbilities");
+                });
+
+            modelBuilder.Entity("ChampionItemsItem", b =>
+                {
+                    b.Property<int>("ChampionItemsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChampionItemsId", "ItemsId");
+
+                    b.HasIndex("ItemsId");
+
+                    b.ToTable("ChampionItemsItem");
+                });
+
+            modelBuilder.Entity("ChampionRunesRune", b =>
+                {
+                    b.Property<int>("ChampionRunesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RunesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChampionRunesId", "RunesId");
+
+                    b.HasIndex("RunesId");
+
+                    b.ToTable("ChampionRunesRune");
+                });
+
+            modelBuilder.Entity("ChampionRunesStatRune", b =>
+                {
+                    b.Property<int>("ChampionRunesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatRunesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChampionRunesId", "StatRunesId");
+
+                    b.HasIndex("StatRunesId");
+
+                    b.ToTable("ChampionRunesStatRune");
+                });
+
+            modelBuilder.Entity("ChampionStarterItemsItem", b =>
+                {
+                    b.Property<int>("ChampionStarterItemsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChampionStarterItemsId", "ItemsId");
+
+                    b.HasIndex("ItemsId");
+
+                    b.ToTable("ChampionStarterItemsItem");
+                });
+
+            modelBuilder.Entity("ChampionSummonerSpellsSummonerSpell", b =>
+                {
+                    b.Property<int>("ChampionSummonerSpellsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SummonerSpellsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChampionSummonerSpellsId", "SummonerSpellsId");
+
+                    b.HasIndex("SummonerSpellsId");
+
+                    b.ToTable("ChampionSummonerSpellsSummonerSpell");
+                });
 
             modelBuilder.Entity("ChampionTag", b =>
                 {
@@ -244,9 +334,6 @@ namespace LoLStats.Data.Migrations
                     b.Property<int>("AbilityType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ChampionAbilitiesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
 
@@ -276,8 +363,6 @@ namespace LoLStats.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChampionAbilitiesId");
-
                     b.HasIndex("ChampionId");
 
                     b.HasIndex("IsDeleted");
@@ -289,9 +374,6 @@ namespace LoLStats.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("BanRate")
-                        .HasColumnType("float");
 
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
@@ -329,20 +411,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<int>("PassiveId")
                         .HasColumnType("int");
 
-                    b.Property<double>("PickRate")
-                        .HasColumnType("float");
-
                     b.Property<int>("StatsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Tier")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("WinRate")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -384,11 +457,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -462,11 +535,8 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("WinRate")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -522,6 +592,9 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<double>("BanRate")
+                        .HasColumnType("float");
+
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
 
@@ -537,14 +610,20 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Tier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -574,14 +653,20 @@ namespace LoLStats.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("MainRuneTree")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("SecondaryRuneTree")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -614,11 +699,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("PickRate")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("WinRate")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -740,11 +825,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PickRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("WinRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -796,12 +881,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ChampionItemsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ChampionStarterItemsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -837,10 +916,6 @@ namespace LoLStats.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChampionItemsId");
-
-                    b.HasIndex("ChampionStarterItemsId");
-
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Items");
@@ -852,9 +927,6 @@ namespace LoLStats.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<int?>("ChampionRunesId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -887,8 +959,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChampionRunesId");
 
                     b.HasIndex("IsDeleted");
 
@@ -966,9 +1036,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("ChampionRunesId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -976,6 +1043,9 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -987,9 +1057,10 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("RowId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ChampionRunesId");
+                    b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
@@ -1035,9 +1106,6 @@ namespace LoLStats.Data.Migrations
                     b.Property<double>("BaseCooldown")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ChampionSummonerSpellsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -1066,8 +1134,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChampionSummonerSpellsId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1207,6 +1273,96 @@ namespace LoLStats.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BaseChampionAbilityChampionAbilities", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.BaseChampionAbility", null)
+                        .WithMany()
+                        .HasForeignKey("AbilitiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.ChampionAbilities", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionAbilitiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChampionItemsItem", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.ChampionItems", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionItemsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChampionRunesRune", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.ChampionRunes", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionRunesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.Rune", null)
+                        .WithMany()
+                        .HasForeignKey("RunesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChampionRunesStatRune", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.ChampionRunes", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionRunesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.StatRune", null)
+                        .WithMany()
+                        .HasForeignKey("StatRunesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChampionStarterItemsItem", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.ChampionStarterItems", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionStarterItemsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ChampionSummonerSpellsSummonerSpell", b =>
+                {
+                    b.HasOne("LoLStats.Data.Models.ChampionSummonerSpells", null)
+                        .WithMany()
+                        .HasForeignKey("ChampionSummonerSpellsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LoLStats.Data.Models.SummonerSpell", null)
+                        .WithMany()
+                        .HasForeignKey("SummonerSpellsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ChampionTag", b =>
                 {
                     b.HasOne("LoLStats.Data.Models.Champion", null)
@@ -1242,10 +1398,6 @@ namespace LoLStats.Data.Migrations
 
             modelBuilder.Entity("LoLStats.Data.Models.BaseChampionAbility", b =>
                 {
-                    b.HasOne("LoLStats.Data.Models.ChampionAbilities", null)
-                        .WithMany("Abilities")
-                        .HasForeignKey("ChampionAbilitiesId");
-
                     b.HasOne("LoLStats.Data.Models.Champion", "Champion")
                         .WithMany("BaseAbilities")
                         .HasForeignKey("ChampionId");
@@ -1347,23 +1499,8 @@ namespace LoLStats.Data.Migrations
                     b.Navigation("Champion");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.Item", b =>
-                {
-                    b.HasOne("LoLStats.Data.Models.ChampionItems", null)
-                        .WithMany("Items")
-                        .HasForeignKey("ChampionItemsId");
-
-                    b.HasOne("LoLStats.Data.Models.ChampionStarterItems", null)
-                        .WithMany("Items")
-                        .HasForeignKey("ChampionStarterItemsId");
-                });
-
             modelBuilder.Entity("LoLStats.Data.Models.Rune", b =>
                 {
-                    b.HasOne("LoLStats.Data.Models.ChampionRunes", null)
-                        .WithMany("Runes")
-                        .HasForeignKey("ChampionRunesId");
-
                     b.HasOne("LoLStats.Data.Models.RunePath", "RunePath")
                         .WithMany("Runes")
                         .HasForeignKey("RunePathId");
@@ -1373,22 +1510,11 @@ namespace LoLStats.Data.Migrations
 
             modelBuilder.Entity("LoLStats.Data.Models.StatRune", b =>
                 {
-                    b.HasOne("LoLStats.Data.Models.ChampionRunes", null)
-                        .WithMany("StatRunes")
-                        .HasForeignKey("ChampionRunesId");
-
                     b.HasOne("LoLStats.Data.Models.StatRuneRow", "Row")
                         .WithMany("Runes")
                         .HasForeignKey("RowId");
 
                     b.Navigation("Row");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.SummonerSpell", b =>
-                {
-                    b.HasOne("LoLStats.Data.Models.ChampionSummonerSpells", null)
-                        .WithMany("SummonerSpells")
-                        .HasForeignKey("ChampionSummonerSpellsId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1479,19 +1605,9 @@ namespace LoLStats.Data.Migrations
                     b.Navigation("EnemyTips");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionAbilities", b =>
-                {
-                    b.Navigation("Abilities");
-                });
-
             modelBuilder.Entity("LoLStats.Data.Models.ChampionInfo", b =>
                 {
                     b.Navigation("Champion");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionItems", b =>
-                {
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.ChampionPassive", b =>
@@ -1499,26 +1615,9 @@ namespace LoLStats.Data.Migrations
                     b.Navigation("Champion");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionRunes", b =>
-                {
-                    b.Navigation("Runes");
-
-                    b.Navigation("StatRunes");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionStarterItems", b =>
-                {
-                    b.Navigation("Items");
-                });
-
             modelBuilder.Entity("LoLStats.Data.Models.ChampionStats", b =>
                 {
                     b.Navigation("Champion");
-                });
-
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionSummonerSpells", b =>
-                {
-                    b.Navigation("SummonerSpells");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.RunePath", b =>

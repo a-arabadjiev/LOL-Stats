@@ -13,7 +13,7 @@
             this.SummonerSpells = new List<string>();
             this.PrimaryRunes = new List<string>();
             this.SecondaryRunes = new List<string>();
-            this.StatRunes = new List<string>();
+            this.StatRunes = new List<StatRuneType>();
             this.SkillsPriority = new List<string>();
             this.CounterChampions = new List<string>();
             this.StartingItems = new List<string>();
@@ -24,7 +24,7 @@
 
         public string Patch { get; set; }
 
-        public Role Role { get; set; }
+        public RoleType Role { get; set; }
 
         public string ChampionTier { get; set; }
 
@@ -42,15 +42,15 @@
 
         public int SummonerSpellsTotalMatches { get; set; }
 
-        public RunePathType MainRuneTree { get; set; }
+        public RuneTreeType MainRuneTree { get; set; }
 
         public ICollection<string> PrimaryRunes { get; set; }
 
-        public RunePathType SecondaryRuneTree { get; set; }
+        public RuneTreeType SecondaryRuneTree { get; set; }
 
         public ICollection<string> SecondaryRunes { get; set; }
 
-        public ICollection<string> StatRunes { get; set; }
+        public ICollection<StatRuneType> StatRunes { get; set; }
 
         public double RunesWinRate { get; set; }
 

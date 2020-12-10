@@ -13,7 +13,7 @@
             this.Runes = new HashSet<Rune>();
         }
 
-        public RunePathType Name { get; set; }
+        public RuneTreeType Name { get; set; }
 
         public string ImageUrl { get; set; }
 

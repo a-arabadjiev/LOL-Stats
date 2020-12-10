@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using LoLStats.Data.Common.Models;
     using LoLStats.Data.Models.Enums;
 
@@ -31,15 +32,7 @@
 
         public ResourceType Partype { get; set; }
 
-        public double WinRate { get; set; }
-
-        public double PickRate { get; set; }
-
-        public double BanRate { get; set; }
-
         public string ImageUrl { get; set; }
-
-        public string Tier { get; set; }
 
         public bool IsFree { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace LoLStats.Data.Models.Enums
 {
-    public enum Role
+    public enum RoleType
     {
         Top,
         Middle,

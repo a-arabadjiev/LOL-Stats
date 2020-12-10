@@ -4,14 +4,16 @@ using LoLStats.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LoLStats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201209214150_ChangeDecimalTypesToDouble")]
+    partial class ChangeDecimalTypesToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,6 +375,9 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<double>("BanRate")
+                        .HasColumnType("float");
+
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
 
@@ -409,11 +414,20 @@ namespace LoLStats.Data.Migrations
                     b.Property<int>("PassiveId")
                         .HasColumnType("int");
 
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
+
                     b.Property<int>("StatsId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Tier")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -455,8 +469,8 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalMatches")
-                        .HasColumnType("int");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
 
                     b.Property<double>("WinRate")
                         .HasColumnType("float");
@@ -533,8 +547,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("WinRate")
-                        .HasColumnType("int");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -590,9 +607,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<double>("BanRate")
-                        .HasColumnType("float");
-
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
 
@@ -612,12 +626,6 @@ namespace LoLStats.Data.Migrations
                         .HasColumnType("float");
 
                     b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalMatches")
                         .HasColumnType("int");
 
                     b.Property<double>("WinRate")
@@ -651,17 +659,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MainRuneTree")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SecondaryRuneTree")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalMatches")
-                        .HasColumnType("int");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
 
                     b.Property<double>("WinRate")
                         .HasColumnType("float");
@@ -697,11 +699,11 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PickRate")
-                        .HasColumnType("int");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
 
-                    b.Property<int>("WinRate")
-                        .HasColumnType("int");
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -823,8 +825,8 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalMatches")
-                        .HasColumnType("int");
+                    b.Property<double>("PickRate")
+                        .HasColumnType("float");
 
                     b.Property<double>("WinRate")
                         .HasColumnType("float");
@@ -1043,9 +1045,6 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1054,9 +1053,6 @@ namespace LoLStats.Data.Migrations
 
                     b.Property<string>("RowId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

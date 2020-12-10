@@ -11,9 +11,9 @@
             this.SummonerSpells = new HashSet<SummonerSpell>();
         }
 
-        public decimal PickRate { get; set; }
+        public int TotalMatches { get; set; }
 
-        public decimal WinRate { get; set; }
+        public double WinRate { get; set; }
 
         public virtual ICollection<SummonerSpell> SummonerSpells { get; set; }
 

@@ -33,7 +33,7 @@
         public async Task<IActionResult> Privacy()
         {
             // Testing
-            await this.dbService.AddBaseGameData();
+            await this.dbService.AddChampionStatisticsData();
 
             return this.View();
         }

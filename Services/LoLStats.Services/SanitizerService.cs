@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Ganss.XSS;
 
@@ -19,6 +20,13 @@
         public string SanitizeString(string stringToParse)
         {
             return this.sanitizer.Sanitize(stringToParse);
+        }
+
+        public string SanitizeItemDescription(string description)
+        {
+            string removedHtmlDescription = Regex.Replace(description, "<(.|\\n)*?>", " ");
+
+            return Regex.Replace(removedHtmlDescription, "[ ]{2,}", " ").Trim();
         }
     }
 }

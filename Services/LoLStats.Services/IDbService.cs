@@ -5,5 +5,7 @@
     public interface IDbService
     {
         Task AddBaseGameData();
+
+        Task AddChampionStatisticsData();
     }
 }

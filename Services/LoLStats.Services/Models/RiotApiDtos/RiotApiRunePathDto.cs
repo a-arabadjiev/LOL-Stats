@@ -8,7 +8,7 @@
 
     public class RiotApiRunePathDto : IMapTo<RunePath>
     {
-        public RunePathType Name { get; set; }
+        public RuneTreeType Name { get; set; }
 
         public string Id { get; set; }
 

@@ -38,4 +38,8 @@
     <ProjectReference Include="..\LoLStats.Web.Infrastructure\LoLStats.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\LoLStats.Web.ViewModels\LoLStats.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\statrunes\" />
+  </ItemGroup>
 </Project>

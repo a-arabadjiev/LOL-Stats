@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LoLStats.Data.Migrations
 {
-    public partial class FinishBaseEntities : Migration
+    public partial class ChangeDecimalTypesToDouble : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -133,6 +133,29 @@ namespace LoLStats.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullCost = table.Column<int>(type: "int", nullable: false),
+                    IndividualCost = table.Column<int>(type: "int", nullable: false),
+                    SellingCost = table.Column<int>(type: "int", nullable: false),
+                    IsPurchasable = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RunePath",
                 columns: table => new
                 {
@@ -181,6 +204,28 @@ namespace LoLStats.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StatRuneRow", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SummonerSpells",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tooltip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BaseCooldown = table.Column<double>(type: "float", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SummonerSpells", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -360,6 +405,58 @@ namespace LoLStats.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Runes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsKeystone = table.Column<bool>(type: "bit", nullable: false),
+                    LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RunePathId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Runes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Runes_RunePath_RunePathId",
+                        column: x => x.RunePathId,
+                        principalTable: "RunePath",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StatRune",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RowId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatRune", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StatRune_StatRuneRow_RowId",
+                        column: x => x.RowId,
+                        principalTable: "StatRuneRow",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AllyTip",
                 columns: table => new
                 {
@@ -384,13 +481,40 @@ namespace LoLStats.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BaseChampionAbilities",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AbilityType = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaxRank = table.Column<byte>(type: "tinyint", nullable: false),
+                    ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseChampionAbilities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaseChampionAbilities_Champions_ChampionId",
+                        column: x => x.ChampionId,
+                        principalTable: "Champions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChampionAbilities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -415,8 +539,8 @@ namespace LoLStats.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -439,8 +563,8 @@ namespace LoLStats.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -465,8 +589,8 @@ namespace LoLStats.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -491,8 +615,8 @@ namespace LoLStats.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -515,8 +639,8 @@ namespace LoLStats.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PickRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WinRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PickRate = table.Column<double>(type: "float", nullable: false),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -583,172 +707,6 @@ namespace LoLStats.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BaseChampionAbilities",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AbilityType = table.Column<int>(type: "int", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaxRank = table.Column<byte>(type: "tinyint", nullable: false),
-                    ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ChampionAbilitiesId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BaseChampionAbilities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BaseChampionAbilities_ChampionAbilities_ChampionAbilitiesId",
-                        column: x => x.ChampionAbilitiesId,
-                        principalTable: "ChampionAbilities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BaseChampionAbilities_Champions_ChampionId",
-                        column: x => x.ChampionId,
-                        principalTable: "Champions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Runes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsKeystone = table.Column<bool>(type: "bit", nullable: false),
-                    LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RunePathId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ChampionRunesId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Runes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Runes_ChampionRunes_ChampionRunesId",
-                        column: x => x.ChampionRunesId,
-                        principalTable: "ChampionRunes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Runes_RunePath_RunePathId",
-                        column: x => x.RunePathId,
-                        principalTable: "RunePath",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StatRune",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RowId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ChampionRunesId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StatRune", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StatRune_ChampionRunes_ChampionRunesId",
-                        column: x => x.ChampionRunesId,
-                        principalTable: "ChampionRunes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StatRune_StatRuneRow_RowId",
-                        column: x => x.RowId,
-                        principalTable: "StatRuneRow",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FullCost = table.Column<int>(type: "int", nullable: false),
-                    IndividualCost = table.Column<int>(type: "int", nullable: false),
-                    SellingCost = table.Column<int>(type: "int", nullable: false),
-                    IsPurchasable = table.Column<bool>(type: "bit", nullable: false),
-                    ChampionItemsId = table.Column<int>(type: "int", nullable: true),
-                    ChampionStarterItemsId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_ChampionItems_ChampionItemsId",
-                        column: x => x.ChampionItemsId,
-                        principalTable: "ChampionItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Items_ChampionStarterItems_ChampionStarterItemsId",
-                        column: x => x.ChampionStarterItemsId,
-                        principalTable: "ChampionStarterItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SummonerSpells",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tooltip = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BaseCooldown = table.Column<double>(type: "float", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ChampionSummonerSpellsId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SummonerSpells", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SummonerSpells_ChampionSummonerSpells_ChampionSummonerSpellsId",
-                        column: x => x.ChampionSummonerSpellsId,
-                        principalTable: "ChampionSummonerSpells",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbilitiesPerLevel",
                 columns: table => new
                 {
@@ -772,6 +730,150 @@ namespace LoLStats.Data.Migrations
                         name: "FK_AbilitiesPerLevel_BaseChampionAbilities_BaseChampionAbilityId",
                         column: x => x.BaseChampionAbilityId,
                         principalTable: "BaseChampionAbilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BaseChampionAbilityChampionAbilities",
+                columns: table => new
+                {
+                    AbilitiesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChampionAbilitiesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseChampionAbilityChampionAbilities", x => new { x.AbilitiesId, x.ChampionAbilitiesId });
+                    table.ForeignKey(
+                        name: "FK_BaseChampionAbilityChampionAbilities_BaseChampionAbilities_AbilitiesId",
+                        column: x => x.AbilitiesId,
+                        principalTable: "BaseChampionAbilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaseChampionAbilityChampionAbilities_ChampionAbilities_ChampionAbilitiesId",
+                        column: x => x.ChampionAbilitiesId,
+                        principalTable: "ChampionAbilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChampionItemsItem",
+                columns: table => new
+                {
+                    ChampionItemsId = table.Column<int>(type: "int", nullable: false),
+                    ItemsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChampionItemsItem", x => new { x.ChampionItemsId, x.ItemsId });
+                    table.ForeignKey(
+                        name: "FK_ChampionItemsItem_ChampionItems_ChampionItemsId",
+                        column: x => x.ChampionItemsId,
+                        principalTable: "ChampionItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChampionItemsItem_Items_ItemsId",
+                        column: x => x.ItemsId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChampionRunesRune",
+                columns: table => new
+                {
+                    ChampionRunesId = table.Column<int>(type: "int", nullable: false),
+                    RunesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChampionRunesRune", x => new { x.ChampionRunesId, x.RunesId });
+                    table.ForeignKey(
+                        name: "FK_ChampionRunesRune_ChampionRunes_ChampionRunesId",
+                        column: x => x.ChampionRunesId,
+                        principalTable: "ChampionRunes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChampionRunesRune_Runes_RunesId",
+                        column: x => x.RunesId,
+                        principalTable: "Runes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChampionRunesStatRune",
+                columns: table => new
+                {
+                    ChampionRunesId = table.Column<int>(type: "int", nullable: false),
+                    StatRunesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChampionRunesStatRune", x => new { x.ChampionRunesId, x.StatRunesId });
+                    table.ForeignKey(
+                        name: "FK_ChampionRunesStatRune_ChampionRunes_ChampionRunesId",
+                        column: x => x.ChampionRunesId,
+                        principalTable: "ChampionRunes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChampionRunesStatRune_StatRune_StatRunesId",
+                        column: x => x.StatRunesId,
+                        principalTable: "StatRune",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChampionStarterItemsItem",
+                columns: table => new
+                {
+                    ChampionStarterItemsId = table.Column<int>(type: "int", nullable: false),
+                    ItemsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChampionStarterItemsItem", x => new { x.ChampionStarterItemsId, x.ItemsId });
+                    table.ForeignKey(
+                        name: "FK_ChampionStarterItemsItem_ChampionStarterItems_ChampionStarterItemsId",
+                        column: x => x.ChampionStarterItemsId,
+                        principalTable: "ChampionStarterItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChampionStarterItemsItem_Items_ItemsId",
+                        column: x => x.ItemsId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChampionSummonerSpellsSummonerSpell",
+                columns: table => new
+                {
+                    ChampionSummonerSpellsId = table.Column<int>(type: "int", nullable: false),
+                    SummonerSpellsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChampionSummonerSpellsSummonerSpell", x => new { x.ChampionSummonerSpellsId, x.SummonerSpellsId });
+                    table.ForeignKey(
+                        name: "FK_ChampionSummonerSpellsSummonerSpell_ChampionSummonerSpells_ChampionSummonerSpellsId",
+                        column: x => x.ChampionSummonerSpellsId,
+                        principalTable: "ChampionSummonerSpells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChampionSummonerSpellsSummonerSpell_SummonerSpells_SummonerSpellsId",
+                        column: x => x.SummonerSpellsId,
+                        principalTable: "SummonerSpells",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -846,11 +948,6 @@ namespace LoLStats.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BaseChampionAbilities_ChampionAbilitiesId",
-                table: "BaseChampionAbilities",
-                column: "ChampionAbilitiesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BaseChampionAbilities_ChampionId",
                 table: "BaseChampionAbilities",
                 column: "ChampionId");
@@ -859,6 +956,11 @@ namespace LoLStats.Data.Migrations
                 name: "IX_BaseChampionAbilities_IsDeleted",
                 table: "BaseChampionAbilities",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseChampionAbilityChampionAbilities_ChampionAbilitiesId",
+                table: "BaseChampionAbilityChampionAbilities",
+                column: "ChampionAbilitiesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChampionAbilities_ChampionId",
@@ -886,6 +988,11 @@ namespace LoLStats.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChampionItemsItem_ItemsId",
+                table: "ChampionItemsItem",
+                column: "ItemsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ChampionPassive_IsDeleted",
                 table: "ChampionPassive",
                 column: "IsDeleted");
@@ -909,6 +1016,16 @@ namespace LoLStats.Data.Migrations
                 name: "IX_ChampionRunes_IsDeleted",
                 table: "ChampionRunes",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChampionRunesRune_RunesId",
+                table: "ChampionRunesRune",
+                column: "RunesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChampionRunesStatRune_StatRunesId",
+                table: "ChampionRunesStatRune",
+                column: "StatRunesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Champions_ChampionId",
@@ -949,6 +1066,11 @@ namespace LoLStats.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChampionStarterItemsItem_ItemsId",
+                table: "ChampionStarterItemsItem",
+                column: "ItemsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ChampionStats_IsDeleted",
                 table: "ChampionStats",
                 column: "IsDeleted");
@@ -962,6 +1084,11 @@ namespace LoLStats.Data.Migrations
                 name: "IX_ChampionSummonerSpells_IsDeleted",
                 table: "ChampionSummonerSpells",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChampionSummonerSpellsSummonerSpell_SummonerSpellsId",
+                table: "ChampionSummonerSpellsSummonerSpell",
+                column: "SummonerSpellsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChampionTag_TagsId",
@@ -979,16 +1106,6 @@ namespace LoLStats.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_ChampionItemsId",
-                table: "Items",
-                column: "ChampionItemsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Items_ChampionStarterItemsId",
-                table: "Items",
-                column: "ChampionStarterItemsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Items_IsDeleted",
                 table: "Items",
                 column: "IsDeleted");
@@ -997,11 +1114,6 @@ namespace LoLStats.Data.Migrations
                 name: "IX_RunePath_IsDeleted",
                 table: "RunePath",
                 column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Runes_ChampionRunesId",
-                table: "Runes",
-                column: "ChampionRunesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Runes_IsDeleted",
@@ -1019,11 +1131,6 @@ namespace LoLStats.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StatRune_ChampionRunesId",
-                table: "StatRune",
-                column: "ChampionRunesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StatRune_IsDeleted",
                 table: "StatRune",
                 column: "IsDeleted");
@@ -1037,11 +1144,6 @@ namespace LoLStats.Data.Migrations
                 name: "IX_StatRuneRow_IsDeleted",
                 table: "StatRuneRow",
                 column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SummonerSpells_ChampionSummonerSpellsId",
-                table: "SummonerSpells",
-                column: "ChampionSummonerSpellsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SummonerSpells_IsDeleted",
@@ -1078,7 +1180,25 @@ namespace LoLStats.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BaseChampionAbilityChampionAbilities");
+
+            migrationBuilder.DropTable(
+                name: "ChampionItemsItem");
+
+            migrationBuilder.DropTable(
                 name: "ChampionRoles");
+
+            migrationBuilder.DropTable(
+                name: "ChampionRunesRune");
+
+            migrationBuilder.DropTable(
+                name: "ChampionRunesStatRune");
+
+            migrationBuilder.DropTable(
+                name: "ChampionStarterItemsItem");
+
+            migrationBuilder.DropTable(
+                name: "ChampionSummonerSpellsSummonerSpell");
 
             migrationBuilder.DropTable(
                 name: "ChampionTag");
@@ -1087,22 +1207,7 @@ namespace LoLStats.Data.Migrations
                 name: "EnemyTip");
 
             migrationBuilder.DropTable(
-                name: "Items");
-
-            migrationBuilder.DropTable(
-                name: "Runes");
-
-            migrationBuilder.DropTable(
                 name: "Settings");
-
-            migrationBuilder.DropTable(
-                name: "StatRune");
-
-            migrationBuilder.DropTable(
-                name: "SummonerSpells");
-
-            migrationBuilder.DropTable(
-                name: "BaseChampionAbilities");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1111,28 +1216,43 @@ namespace LoLStats.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "BaseChampionAbilities");
+
+            migrationBuilder.DropTable(
+                name: "ChampionAbilities");
 
             migrationBuilder.DropTable(
                 name: "ChampionItems");
 
             migrationBuilder.DropTable(
-                name: "ChampionStarterItems");
-
-            migrationBuilder.DropTable(
-                name: "RunePath");
+                name: "Runes");
 
             migrationBuilder.DropTable(
                 name: "ChampionRunes");
 
             migrationBuilder.DropTable(
-                name: "StatRuneRow");
+                name: "StatRune");
+
+            migrationBuilder.DropTable(
+                name: "ChampionStarterItems");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "ChampionSummonerSpells");
 
             migrationBuilder.DropTable(
-                name: "ChampionAbilities");
+                name: "SummonerSpells");
+
+            migrationBuilder.DropTable(
+                name: "Tag");
+
+            migrationBuilder.DropTable(
+                name: "RunePath");
+
+            migrationBuilder.DropTable(
+                name: "StatRuneRow");
 
             migrationBuilder.DropTable(
                 name: "Champions");

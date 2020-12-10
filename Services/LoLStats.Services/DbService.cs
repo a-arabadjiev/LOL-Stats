@@ -26,12 +26,15 @@
         private readonly IDeletableEntityRepository<Item> itemsRepository;
         private readonly IDeletableEntityRepository<RunePath> runePathsRepository;
         private readonly IDeletableEntityRepository<Rune> runesRepository;
+        private readonly IDeletableEntityRepository<StatRune> statRunesRepository;
         private readonly IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository;
         private readonly IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository;
+        private readonly IDeletableEntityRepository<BaseChampionAbility> baseChampionAbilitiesRepository;
         private readonly IRiotSharpService riotSharpService;
         private readonly IScraperService scraperService;
 
         public DbService(
+            IDeletableEntityRepository<BaseChampionAbility> baseChampionAbilitiesRepository,
             IRiotSharpService riotSharpService,
             IScraperService scraperService,
             IDeletableEntityRepository<Champion> championsRepository,
@@ -44,9 +47,11 @@
             IDeletableEntityRepository<Item> itemsRepository,
             IDeletableEntityRepository<RunePath> runePathsRepository,
             IDeletableEntityRepository<Rune> runesRepository,
+            IDeletableEntityRepository<StatRune> statRunesRepository,
             IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository,
             IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository)
         {
+            this.baseChampionAbilitiesRepository = baseChampionAbilitiesRepository;
             this.riotSharpService = riotSharpService;
             this.scraperService = scraperService;
             this.championsRepository = championsRepository;
@@ -59,18 +64,166 @@
             this.itemsRepository = itemsRepository;
             this.runePathsRepository = runePathsRepository;
             this.runesRepository = runesRepository;
+            this.statRunesRepository = statRunesRepository;
             this.summonerSpellsRepository = summonerSpellsRepository;
             this.statRuneRowsRepository = statRuneRowsRepository;
         }
 
         public async Task AddBaseGameData()
         {
-            var championDtos = this.riotSharpService.ReturnChampionsData().OrderBy(x => x.Id).ToArray();
-            var itemDtos = this.riotSharpService.ReturnItemsData().ToArray();
-            var runeTreeDtos = this.riotSharpService.ReturnRunesData().ToArray();
-            var summonerSpellDtos = this.riotSharpService.ReturnSummonerSpellsData().ToArray();
+            await this.AddChampions();
 
-            // Add Champions
+            await this.AddItems();
+
+            await this.AddSummonerSpells();
+
+            await this.AddRunes();
+
+            await this.AddStatRunes();
+        }
+
+        public async Task AddChampionStatisticsData()
+        {
+            var championPageDtos = this.scraperService.ReturnChampionPageInfo();
+
+            foreach (var championPageDto in championPageDtos)
+            {
+                var championAbilities = new ChampionAbilities
+                {
+                    ChampionId = championPageDto.Key,
+                    WinRate = championPageDto.SkillsWinRate,
+                    TotalMatches = championPageDto.SkillsMatchesCount,
+                };
+
+                foreach (var abilityTypeDto in championPageDto.SkillsPriority)
+                {
+                    var ability = this.baseChampionAbilitiesRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(a => a.Id == championPageDto.Key + abilityTypeDto);
+
+                    championAbilities.Abilities.Add(ability);
+                }
+
+                await this.championAbilitiesRepository.AddAsync(championAbilities);
+                await this.championAbilitiesRepository.SaveChangesAsync();
+
+                var championRole = new ChampionRole
+                {
+                    ChampionId = championPageDto.Key,
+                    Role = championPageDto.Role,
+                    WinRate = championPageDto.ChampionWinRate,
+                    PickRate = championPageDto.ChampionPickRate,
+                    BanRate = championPageDto.ChampionBanRate,
+                    TotalMatches = championPageDto.ChampionTotalMatches,
+                    Tier = championPageDto.ChampionTier,
+                };
+
+                await this.championRolesRepository.AddAsync(championRole);
+                await this.championRolesRepository.SaveChangesAsync();
+
+                var championSummonerSpells = new ChampionSummonerSpells
+                {
+                    ChampionId = championPageDto.Key,
+                    WinRate = championPageDto.SummonerSpellsWinRate,
+                    TotalMatches = championPageDto.SummonerSpellsTotalMatches,
+                };
+
+                foreach (var spellDto in championPageDto.SummonerSpells)
+                {
+                    var summonerSpell = this.summonerSpellsRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(s => s.Name == spellDto);
+
+                    championSummonerSpells.SummonerSpells.Add(summonerSpell);
+                }
+
+                await this.championSummonerSpellsRepository.AddAsync(championSummonerSpells);
+                await this.championSummonerSpellsRepository.SaveChangesAsync();
+
+                var championStarterItems = new ChampionStarterItems
+                {
+                    ChampionId = championPageDto.Key,
+                    WinRate = championPageDto.StartingItemsWinRate,
+                    PickRate = championPageDto.StartingItemsPickRate,
+                };
+
+                foreach (var itemDto in championPageDto.StartingItems)
+                {
+                    var item = this.itemsRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(i => i.Name == itemDto);
+
+                    championStarterItems.Items.Add(item);
+                }
+
+                await this.championStarterItemsRepository.AddAsync(championStarterItems);
+                await this.championStarterItemsRepository.SaveChangesAsync();
+
+                var championItems = new ChampionItems
+                {
+                    ChampionId = championPageDto.Key,
+                    WinRate = (int)Math.Round(championPageDto.ItemsWinRateKvp.Values.Average()),
+                };
+
+                foreach (var itemDto in championPageDto.ItemsWinRateKvp.Keys)
+                {
+                    var item = this.itemsRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(i => i.Name == itemDto);
+
+                    championItems.Items.Add(item);
+                }
+
+                await this.championItemsRepository.AddAsync(championItems);
+                await this.championItemsRepository.SaveChangesAsync();
+
+                var championRunes = new ChampionRunes
+                {
+                    ChampionId = championPageDto.Key,
+                    WinRate = championPageDto.RunesWinRate,
+                    TotalMatches = championPageDto.RunesMatchesCount,
+                    MainRuneTree = championPageDto.MainRuneTree,
+                    SecondaryRuneTree = championPageDto.SecondaryRuneTree,
+                };
+
+                foreach (var runeDto in championPageDto.PrimaryRunes)
+                {
+                    var rune = this.runesRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(r => r.Name == runeDto);
+
+                    championRunes.Runes.Add(rune);
+                }
+
+                foreach (var runeDto in championPageDto.SecondaryRunes)
+                {
+                    var rune = this.runesRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(r => r.Name == runeDto);
+
+                    championRunes.Runes.Add(rune);
+                }
+
+                for (int i = 0; i < championPageDto.StatRunes.Count; i++)
+                {
+                    var statRuneDto = championPageDto.StatRunes.ToArray()[i];
+
+                    var statRune = this.statRunesRepository
+                        .AllAsNoTracking()
+                        .FirstOrDefault(r => r.Row.Type == (StatRuneTreeType)i && r.Type == statRuneDto);
+
+                    championRunes.StatRunes.Add(statRune);
+                }
+
+                await this.championRunesRepository.AddAsync(championRunes);
+                await this.championRunesRepository.SaveChangesAsync();
+            }
+        }
+
+        private async Task AddChampions()
+        {
+            var championDtos = this.riotSharpService.ReturnChampionsData().OrderBy(x => x.Id).ToArray();
+
             for (int i = 0; i < championDtos.Length; i++)
             {
                 var championDto = championDtos[i];
@@ -193,8 +346,12 @@
             }
 
             await this.championsRepository.SaveChangesAsync();
+        }
 
-            // Add Items
+        private async Task AddItems()
+        {
+            var itemDtos = this.riotSharpService.ReturnItemsData().ToArray();
+
             foreach (var itemDto in itemDtos)
             {
                 var item = new Item
@@ -212,8 +369,12 @@
             }
 
             await this.itemsRepository.SaveChangesAsync();
+        }
 
-            // Add Summoner Spells
+        private async Task AddSummonerSpells()
+        {
+            var summonerSpellDtos = this.riotSharpService.ReturnSummonerSpellsData().ToArray();
+
             foreach (var spellDto in summonerSpellDtos)
             {
                 var summonerSpell = new SummonerSpell
@@ -230,14 +391,19 @@
             }
 
             await this.summonerSpellsRepository.SaveChangesAsync();
+        }
 
-            // Add Runes
+        private async Task AddRunes()
+        {
+            var runeTreeDtos = this.riotSharpService.ReturnRunesData().ToArray();
+
             foreach (var runeTreeDto in runeTreeDtos)
             {
                 var runeTree = new RunePath
                 {
                     Name = runeTreeDto.Name,
                     ImageUrl = runeTreeDto.ImageUrl,
+                    Id = runeTreeDto.Id,
                 };
 
                 foreach (var runeDto in runeTreeDto.RuneDtos)
@@ -249,7 +415,7 @@
                         ShortDescription = runeDto.ShortDescription,
                         ImageUrl = runeDto.ImageUrl,
                         IsKeystone = runeDto.IsKeystone,
-                        RunePathId = runeTree.Name.ToString(),
+                        RunePathId = runeTree.Id,
                     };
 
                     runeTree.Runes.Add(rune);
@@ -259,11 +425,14 @@
             }
 
             await this.runePathsRepository.SaveChangesAsync();
+        }
 
+        private async Task AddStatRunes()
+        {
             // Add StatRunes
-            string[] offenseRuneValues = { "Adaptive Force +9", "+9% Attack Speed", "Ability Haste +8 (Based on level)" };
-            string[] flexRuneValues = { "Adaptive Force +9", "+6 Armor", "+8 Magic Resist" };
-            string[] defenseRuneValues = { "+15-90 Health (Based on level)", "+6 Armor", "+8 Magic Resist" };
+            string[] offenseRuneValues = { "Adaptive Force +9", "Attack Speed +9%", "Ability Haste +8 (Based on level)" };
+            string[] flexRuneValues = { "Adaptive Force +9", "Armor +6", "Magic Resist +8" };
+            string[] defenseRuneValues = { "Health +15-90 (Based on level)", "Armor +6", "Magic Resist +8" };
 
             string[][] valueRows = { offenseRuneValues, flexRuneValues, defenseRuneValues };
 
@@ -271,15 +440,18 @@
             {
                 var runeRow = new StatRuneRow
                 {
-                    Type = (StatRuneType)i,
-                    Id = ((StatRuneType)i).ToString(),
+                    Type = (StatRuneTreeType)i,
+                    Id = ((StatRuneTreeType)i).ToString(),
                 };
                 for (int j = 0; j < 3; j++)
                 {
+                    string currentDescription = valueRows[i][j];
+
                     runeRow.Runes.Add(new StatRune
                     {
-                        RowId = runeRow.Type.ToString(),
-                        Description = valueRows[i][j],
+                        RowId = runeRow.Id,
+                        Description = currentDescription,
+                        ImagePath = $"wwwroot/images/statrunes/{currentDescription.Split(" ").First()}.png",
                     });
                 }
 
