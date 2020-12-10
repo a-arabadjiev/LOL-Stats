@@ -17,7 +17,7 @@
 
         public RiotSharpService(ISanitizerService sanitizerService)
         {
-            this.api = RiotApi.GetDevelopmentInstance("RGAPI-53a0689c-15c9-442a-b3e1-9b514fd0dec9");
+            this.api = RiotApi.GetDevelopmentInstance("RGAPI-a5c01c37-c05b-4086-91f1-5f0432ad1df0");
             this.latestVersion = this.api.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
             this.sanitizerService = sanitizerService;
         }

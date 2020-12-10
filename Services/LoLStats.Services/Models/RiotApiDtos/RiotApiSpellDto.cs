@@ -6,7 +6,7 @@
     using LoLStats.Data.Models.Enums;
     using LoLStats.Services.Mapping;
 
-    public class RiotApiSpellDto : IMapTo<BaseChampionAbility>
+    public class RiotApiSpellDto : IMapTo<BaseAbility>
     {
         public RiotApiSpellDto()
         {

@@ -11,14 +11,14 @@
     {
         public Champion()
         {
-            this.BaseAbilities = new HashSet<BaseChampionAbility>();
+            this.BaseAbilities = new HashSet<BaseAbility>();
             this.BestAbilities = new HashSet<ChampionAbilities>();
             this.ChampionRoles = new HashSet<ChampionRole>();
             this.BestSummonerSpells = new HashSet<ChampionSummonerSpells>();
             this.BestStartingItems = new HashSet<ChampionStarterItems>();
             this.BestItems = new HashSet<ChampionItems>();
             this.BestRunes = new HashSet<ChampionRunes>();
-            this.CounterChampions = new HashSet<Champion>();
+            this.CounterChampions = new HashSet<CounterChampion>();
             this.Tags = new HashSet<Tag>();
             this.AllyTips = new HashSet<AllyTip>();
             this.EnemyTips = new HashSet<EnemyTip>();
@@ -57,7 +57,7 @@
 
         public virtual ICollection<EnemyTip> EnemyTips { get; set; }
 
-        public virtual ICollection<BaseChampionAbility> BaseAbilities { get; set; }
+        public virtual ICollection<BaseAbility> BaseAbilities { get; set; }
 
         public virtual ICollection<ChampionAbilities> BestAbilities { get; set; }
 
@@ -71,6 +71,6 @@
 
         public virtual ICollection<ChampionRunes> BestRunes { get; set; }
 
-        public virtual ICollection<Champion> CounterChampions { get; set; }
+        public virtual ICollection<CounterChampion> CounterChampions { get; set; }
     }
 }

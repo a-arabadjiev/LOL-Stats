@@ -7,9 +7,9 @@
     using LoLStats.Data.Common.Models;
     using LoLStats.Data.Models.Enums;
 
-    public class BaseChampionAbility : BaseDeletableModel<string>
+    public class BaseAbility : BaseDeletableModel<string>
     {
-        public BaseChampionAbility()
+        public BaseAbility()
         {
             this.PerLevelStats = new HashSet<AbilityPerLevel>();
             this.ChampionAbilities = new HashSet<ChampionAbilities>();

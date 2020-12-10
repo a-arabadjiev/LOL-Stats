@@ -26,25 +26,59 @@
 
         public DbSet<AbilityPerLevel> AbilitiesPerLevel { get; set; }
 
+        public DbSet<AllyTip> AllyTips { get; set; }
+
+        public DbSet<EnemyTip> EnemyTips { get; set; }
+
+        public DbSet<Tag> ChampionTags { get; set; }
+
         public DbSet<Item> Items { get; set; }
 
         public DbSet<Rune> Runes { get; set; }
+
+        public DbSet<StatRuneRow> StatRuneRows { get; set; }
+
+        public DbSet<StatRune> StatRunes { get; set; }
+
+        public DbSet<RunePath> RunePaths { get; set; }
 
         public DbSet<Champion> Champions { get; set; }
 
         public DbSet<SummonerSpell> SummonerSpells { get; set; }
 
-        public DbSet<BaseChampionAbility> BaseChampionAbilities { get; set; }
+        public DbSet<BaseAbility> BaseAbilities { get; set; }
 
-        public DbSet<ChampionAbilities> ChampionAbilities { get; set; }
+        public DbSet<ChampionAbilities> ChampionsAbilities { get; set; }
 
-        public DbSet<ChampionItems> ChampionItems { get; set; }
+        public DbSet<ChampionAbilitiesAbility> ChampionsAbilitiesAbility { get; set; }
 
-        public DbSet<ChampionRole> ChampionRoles { get; set; }
+        public DbSet<CounterChampion> CounterChampions { get; set; }
 
-        public DbSet<ChampionRunes> ChampionRunes { get; set; }
+        public DbSet<ChampionCounterChampions> ChampionCounterChampions { get; set; }
 
-        public DbSet<ChampionSummonerSpells> ChampionSummonerSpells { get; set; }
+        public DbSet<ChampionInfo> ChampionsInfo { get; set; }
+
+        public DbSet<ChampionItemsItem> ChampionsItemsItem { get; set; }
+
+        public DbSet<ChampionStarterItemsItem> ChampionsStarterItemsItem { get; set; }
+
+        public DbSet<ChampionPassive> ChampionPassives { get; set; }
+
+        public DbSet<ChampionItems> ChampionsItems { get; set; }
+
+        public DbSet<ChampionRole> ChampionsRoles { get; set; }
+
+        public DbSet<ChampionRunes> ChampionsRunes { get; set; }
+
+        public DbSet<ChampionRunesRune> ChampionsRunesRune { get; set; }
+
+        public DbSet<ChampionRunesStatRune> ChampionsRunesStatRune { get; set; }
+
+        public DbSet<ChampionSummonerSpells> ChampionsSummonerSpell { get; set; }
+
+        public DbSet<ChampionSummonerSpellsSummonerSpell> ChampionsSummonerSpellsSummonerSpell { get; set; }
+
+        public DbSet<ChampionStats> ChampionsStats { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 

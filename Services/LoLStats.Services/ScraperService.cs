@@ -193,7 +193,7 @@
                 {
                     foreach (var activeRuneElement in runeRowElement.Children.Where(x => x.ClassName == "shard shard-active"))
                     {
-                        string[] statRuneValues = { "Attack", "Speed", "Armor", "Resist", "Health", "CDR"};
+                        string[] statRuneValues = { "Attack", "Speed", "Armor", "Resist", "Health", "CDR" };
 
                         string runeDescription = Regex.Match(activeRuneElement.InnerHtml, statRuneNamePatter).ToString();
 

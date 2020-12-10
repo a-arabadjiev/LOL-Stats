@@ -7,7 +7,7 @@
     {
         public string BaseChampionAbilityId { get; set; }
 
-        public BaseChampionAbility Ability { get; set; }
+        public BaseAbility Ability { get; set; }
 
         public int Level { get; set; }
 

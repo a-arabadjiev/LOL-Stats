@@ -8,7 +8,7 @@
     {
         public ChampionAbilities()
         {
-            this.Abilities = new HashSet<BaseChampionAbility>();
+            this.Abilities = new HashSet<BaseAbility>();
         }
 
         public int TotalMatches { get; set; }
@@ -19,6 +19,6 @@
 
         public virtual Champion Champion { get; set; }
 
-        public virtual ICollection<BaseChampionAbility> Abilities { get; set; }
+        public virtual ICollection<BaseAbility> Abilities { get; set; }
     }
 }

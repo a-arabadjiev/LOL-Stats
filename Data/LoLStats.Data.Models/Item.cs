@@ -1,7 +1,8 @@
 ﻿namespace LoLStats.Data.Models
 {
-    using LoLStats.Data.Common.Models;
     using System.Collections.Generic;
+
+    using LoLStats.Data.Common.Models;
 
     public class Item : BaseDeletableModel<int>
     {
