@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LoLStats.Data.Migrations
 {
-    public partial class Create : Migration
+    public partial class FixCounterChampionEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -147,24 +147,6 @@ namespace LoLStats.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChampionTags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CounterChampions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WinRate = table.Column<double>(type: "float", nullable: false),
-                    TotalMatches = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CounterChampions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -445,7 +427,7 @@ namespace LoLStats.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    RuneType = table.Column<int>(type: "int", nullable: false),
                     RowId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -517,38 +499,16 @@ namespace LoLStats.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChampionCounterChampion",
-                columns: table => new
-                {
-                    ChampionsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CounterChampionsId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChampionCounterChampion", x => new { x.ChampionsId, x.CounterChampionsId });
-                    table.ForeignKey(
-                        name: "FK_ChampionCounterChampion_Champions_ChampionsId",
-                        column: x => x.ChampionsId,
-                        principalTable: "Champions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ChampionCounterChampion_CounterChampions_CounterChampionsId",
-                        column: x => x.CounterChampionsId,
-                        principalTable: "CounterChampions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChampionCounterChampions",
+                name: "ChampionCounters",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CounterChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CounterChapmionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CounterChampionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CounterChapmionKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WinRate = table.Column<double>(type: "float", nullable: false),
+                    TotalMatches = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -556,17 +516,11 @@ namespace LoLStats.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChampionCounterChampions", x => x.Id);
+                    table.PrimaryKey("PK_ChampionCounters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChampionCounterChampions_Champions_ChampionId",
+                        name: "FK_ChampionCounters_Champions_ChampionId",
                         column: x => x.ChampionId,
                         principalTable: "Champions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ChampionCounterChampions_CounterChampions_CounterChampionId",
-                        column: x => x.CounterChampionId,
-                        principalTable: "CounterChampions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -782,7 +736,7 @@ namespace LoLStats.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BaseChampionAbilityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AbilityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Level = table.Column<int>(type: "int", nullable: false),
+                    Level = table.Column<byte>(type: "tinyint", nullable: false),
                     Cooldown = table.Column<double>(type: "float", nullable: false),
                     Cost = table.Column<double>(type: "float", nullable: false),
                     CostsPerSecond = table.Column<bool>(type: "bit", nullable: false),
@@ -1212,23 +1166,13 @@ namespace LoLStats.Data.Migrations
                 column: "ChampionAbilitiesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChampionCounterChampion_CounterChampionsId",
-                table: "ChampionCounterChampion",
-                column: "CounterChampionsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChampionCounterChampions_ChampionId",
-                table: "ChampionCounterChampions",
+                name: "IX_ChampionCounters_ChampionId",
+                table: "ChampionCounters",
                 column: "ChampionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChampionCounterChampions_CounterChampionId",
-                table: "ChampionCounterChampions",
-                column: "CounterChampionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChampionCounterChampions_IsDeleted",
-                table: "ChampionCounterChampions",
+                name: "IX_ChampionCounters_IsDeleted",
+                table: "ChampionCounters",
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
@@ -1455,11 +1399,6 @@ namespace LoLStats.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CounterChampions_IsDeleted",
-                table: "CounterChampions",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EnemyTips_ChampionId",
                 table: "EnemyTips",
                 column: "ChampionId");
@@ -1542,10 +1481,7 @@ namespace LoLStats.Data.Migrations
                 name: "BaseAbilityChampionAbilities");
 
             migrationBuilder.DropTable(
-                name: "ChampionCounterChampion");
-
-            migrationBuilder.DropTable(
-                name: "ChampionCounterChampions");
+                name: "ChampionCounters");
 
             migrationBuilder.DropTable(
                 name: "ChampionItemsItem");
@@ -1597,9 +1533,6 @@ namespace LoLStats.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "CounterChampions");
 
             migrationBuilder.DropTable(
                 name: "BaseAbilities");

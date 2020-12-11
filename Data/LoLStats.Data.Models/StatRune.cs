@@ -15,7 +15,7 @@
         // TODO
         public virtual StatRuneRow Row { get; set; }
 
-        public StatRuneType Type { get; set; }
+        public StatRuneType RuneType { get; set; }
 
         public string RowId { get; set; }
 

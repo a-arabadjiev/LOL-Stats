@@ -18,7 +18,7 @@
             this.BestStartingItems = new HashSet<ChampionStarterItems>();
             this.BestItems = new HashSet<ChampionItems>();
             this.BestRunes = new HashSet<ChampionRunes>();
-            this.CounterChampions = new HashSet<CounterChampion>();
+            this.ChampionCounters = new HashSet<ChampionCounter>();
             this.Tags = new HashSet<Tag>();
             this.AllyTips = new HashSet<AllyTip>();
             this.EnemyTips = new HashSet<EnemyTip>();
@@ -71,6 +71,6 @@
 
         public virtual ICollection<ChampionRunes> BestRunes { get; set; }
 
-        public virtual ICollection<CounterChampion> CounterChampions { get; set; }
+        public virtual ICollection<ChampionCounter> ChampionCounters { get; set; }
     }
 }

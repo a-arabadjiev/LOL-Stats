@@ -24,8 +24,7 @@
         private readonly IDeletableEntityRepository<StatRune> statRunesRepository;
         private readonly IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository;
         private readonly IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository;
-        private readonly IDeletableEntityRepository<CounterChampion> counterChampionsRepository;
-        private readonly IDeletableEntityRepository<ChampionCounterChampions> championCounterChapmionsRepository;
+        private readonly IDeletableEntityRepository<ChampionCounter> championCountersRepository;
         private readonly IDeletableEntityRepository<ChampionItemsItem> championItemsItemRepository;
         private readonly IDeletableEntityRepository<ChampionStarterItemsItem> championStarterItemsItemRepository;
         private readonly IDeletableEntityRepository<ChampionSummonerSpellsSummonerSpell> championSummonerSpellsSummonerSpellRepository;
@@ -37,8 +36,7 @@
         private readonly IScraperService scraperService;
 
         public DbService(
-            IDeletableEntityRepository<CounterChampion> counterChampionsRepository,
-            IDeletableEntityRepository<ChampionCounterChampions> championCounterChapmionsRepository,
+            IDeletableEntityRepository<ChampionCounter> championCountersRepository,
             IDeletableEntityRepository<ChampionItemsItem> championItemsItemRepository,
             IDeletableEntityRepository<ChampionStarterItemsItem> championStarterItemsItemRepository,
             IDeletableEntityRepository<ChampionSummonerSpellsSummonerSpell> championSummonerSpellsSummonerSpellRepository,
@@ -62,8 +60,8 @@
             IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository,
             IDeletableEntityRepository<StatRuneRow> statRuneRowsRepository)
         {
-            this.counterChampionsRepository = counterChampionsRepository;
-            this.championCounterChapmionsRepository = championCounterChapmionsRepository;
+            this.championCountersRepository = championCountersRepository;
+            this.championCountersRepository = championCountersRepository;
             this.championItemsItemRepository = championItemsItemRepository;
             this.championStarterItemsItemRepository = championStarterItemsItemRepository;
             this.championSummonerSpellsSummonerSpellRepository = championSummonerSpellsSummonerSpellRepository;
@@ -109,55 +107,45 @@
             {
                 var championPageDto = championPageDtos[i];
 
-                await this.AddChampionAbilitiesStatistics(championPageDto, i);
+                await this.AddChampionAbilitiesStatistics(championPageDto);
 
                 await this.AddChampionRoleStatistics(championPageDto);
 
-                await this.AddChampionSummonerSpellsStatistics(championPageDto, i);
+                await this.AddChampionSummonerSpellsStatistics(championPageDto);
 
-                await this.AddChampionStarterItemsStatistics(championPageDto, i);
+                await this.AddChampionStarterItemsStatistics(championPageDto);
 
-                await this.AddChampionItemsStatistics(championPageDto, i);
+                await this.AddChampionItemsStatistics(championPageDto);
 
-                await this.AddChampionRunesStatistics(championPageDto, i);
+                await this.AddChampionRunesStatistics(championPageDto);
 
-                await this.AddCounterChampionsStatistics(championPageDto, i);
+                await this.AddCounterChampionsStatistics(championPageDto);
             }
         }
 
         // Statistics
-        private async Task AddCounterChampionsStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddCounterChampionsStatistics(ChampionPageDto championPageDto)
         {
             foreach (var champion in championPageDto.CounterChampions)
             {
-                var counterChampionId = this.championsRepository
+                var counterChampion = this.championsRepository
                     .AllAsNoTracking()
-                    .FirstOrDefault(c => c.Name.Contains(champion)).Id;
+                    .FirstOrDefault(c => c.Name.Contains(champion));
 
-                var counterChampion = new CounterChampion
-                {
-                    Id = counterChampionId,
-                    Name = champion,
-                    TotalMatches = 0, // tempporary
-                    WinRate = 0, // temporary
-                };
-
-                await this.counterChampionsRepository.AddAsync(counterChampion);
-
-                var championCounterChampions = new ChampionCounterChampions
+                var championCounter = new ChampionCounter
                 {
                     ChampionId = championPageDto.Key,
-                    CounterChapmionId = counterChampion.Id,
+                    CounterChampionName = counterChampion.Name,
+                    CounterChapmionKey = counterChampion.Id,
                 };
 
-                await this.championCounterChapmionsRepository.AddAsync(championCounterChampions);
+                await this.championCountersRepository.AddAsync(championCounter);
             }
 
-            await this.counterChampionsRepository.SaveChangesAsync();
-            await this.championCounterChapmionsRepository.SaveChangesAsync();
+            await this.championCountersRepository.SaveChangesAsync();
         }
 
-        private async Task AddChampionRunesStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddChampionRunesStatistics(ChampionPageDto championPageDto)
         {
             var championRunes = new ChampionRunes
             {
@@ -182,11 +170,17 @@
             {
                 var runeId = this.runesRepository
                     .AllAsNoTracking()
-                    .FirstOrDefault(r => r.Name == runeDto).Id;
+                    .FirstOrDefault(r => r.Name.Contains(runeDto)).Id;
+
+                var championRunesId = this.championRunesRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                     && x.WinRate == championPageDto.RunesWinRate
+                     && x.TotalMatches == championPageDto.RunesMatchesCount).Id;
 
                 var championRunesRune = new ChampionRunesRune
                 {
-                    ChampionRunesId = i,
+                    ChampionRunesId = championRunesId,
                     RuneId = runeId,
                 };
 
@@ -203,11 +197,17 @@
 
                 var statRuneId = this.statRunesRepository
                     .AllAsNoTracking()
-                    .FirstOrDefault(r => r.Row.Type == (StatRuneTreeType)j && r.Type == statRuneDto).Id;
+                    .FirstOrDefault(r => r.Row.Type == (StatRuneTreeType)j && r.RuneType == statRuneDto).Id;
+
+                var championRunesId = this.championRunesRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                     && x.WinRate == championPageDto.RunesWinRate
+                     && x.TotalMatches == championPageDto.RunesMatchesCount).Id;
 
                 var championRunesStatRune = new ChampionRunesStatRune
                 {
-                    ChampionRunesId = i,
+                    ChampionRunesId = championRunesId,
                     StatRuneId = statRuneId,
                 };
 
@@ -217,7 +217,7 @@
             await this.championRunesStatRuneRepository.SaveChangesAsync();
         }
 
-        private async Task AddChampionItemsStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddChampionItemsStatistics(ChampionPageDto championPageDto)
         {
             var championItems = new ChampionItems
             {
@@ -234,10 +234,15 @@
                     .AllAsNoTracking()
                     .FirstOrDefault(x => x.Name == itemDto).Id;
 
+                var championItemsId = this.championItemsRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                     && x.WinRate == championItems.WinRate).Id;
+
                 var championItemsItem = new ChampionItemsItem
                 {
                     ItemId = itemId,
-                    ChampionItemsId = i,
+                    ChampionItemsId = championItemsId,
                 };
 
                 await this.championItemsItemRepository.AddAsync(championItemsItem);
@@ -246,7 +251,7 @@
             await this.championItemsItemRepository.SaveChangesAsync();
         }
 
-        private async Task AddChampionStarterItemsStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddChampionStarterItemsStatistics(ChampionPageDto championPageDto)
         {
             var championStarterItems = new ChampionStarterItems
             {
@@ -258,16 +263,21 @@
             await this.championStarterItemsRepository.AddAsync(championStarterItems);
             await this.championStarterItemsRepository.SaveChangesAsync();
 
-            foreach (var itemDto in championPageDto.StartingItems)
+            foreach (var itemDto in championPageDto.StartingItems.Where(i => i != string.Empty))
             {
                 var itemId = this.itemsRepository
                     .AllAsNoTracking()
-                    .FirstOrDefault(x => x.Name == itemDto).Id;
+                    .FirstOrDefault(x => x.Name.Contains(itemDto)).Id;
+
+                var championStarterItemsId = this.championStarterItemsRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                    && x.PickRate == championPageDto.StartingItemsPickRate && x.WinRate == championPageDto.StartingItemsWinRate).Id;
 
                 var championStarterItemsItem = new ChampionStarterItemsItem
                 {
                     ItemId = itemId,
-                    ChampionStarterItemsId = i,
+                    ChampionStarterItemsId = championStarterItemsId,
                 };
 
                 await this.championStarterItemsItemRepository.AddAsync(championStarterItemsItem);
@@ -276,7 +286,7 @@
             await this.championStarterItemsItemRepository.SaveChangesAsync();
         }
 
-        private async Task AddChampionSummonerSpellsStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddChampionSummonerSpellsStatistics(ChampionPageDto championPageDto)
         {
             var championSummonerSpells = new ChampionSummonerSpells
             {
@@ -294,9 +304,15 @@
                     .AllAsNoTracking()
                     .FirstOrDefault(s => s.Name == spellDto).Id;
 
+                var championSummonerSpellsId = this.championSummonerSpellsRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                    && x.WinRate == championPageDto.SummonerSpellsWinRate
+                    && x.TotalMatches == championPageDto.SummonerSpellsTotalMatches).Id;
+
                 var championSummonerSpellsSummonerSpell = new ChampionSummonerSpellsSummonerSpell
                 {
-                    ChampionSummonerSpellsId = i,
+                    ChampionSummonerSpellsId = championSummonerSpellsId,
                     SummonerSpellId = summonerSpellId,
                 };
 
@@ -323,7 +339,7 @@
             await this.championRolesRepository.SaveChangesAsync();
         }
 
-        private async Task AddChampionAbilitiesStatistics(ChampionPageDto championPageDto, int i)
+        private async Task AddChampionAbilitiesStatistics(ChampionPageDto championPageDto)
         {
             var championAbilities = new ChampionAbilities
             {
@@ -341,10 +357,15 @@
                     .AllAsNoTracking()
                     .FirstOrDefault(a => a.Id == championPageDto.Key + abilityTypeDto).Id;
 
+                var championAbilitiesId = this.championAbilitiesRepository
+                    .AllAsNoTracking()
+                    .FirstOrDefault(x => x.ChampionId == championPageDto.Key
+                    && x.TotalMatches == championPageDto.SkillsMatchesCount && x.WinRate == championPageDto.SkillsWinRate).Id;
+
                 var championAbilitiesAbility = new ChampionAbilitiesAbility
                 {
                     BaseAbilityId = abilityId,
-                    ChampionAbilitiesId = i,
+                    ChampionAbilitiesId = championAbilitiesId,
                 };
 
                 await this.championAbilitiesAbilitiesRepository.AddAsync(championAbilitiesAbility);
@@ -570,6 +591,9 @@
 
             string[][] valueRows = { offenseRuneValues, flexRuneValues, defenseRuneValues };
 
+            int[] runeTypeValues = { 0, 1, 5, 0, 2, 3, 4, 2, 3 };
+            int runesAddedCount = 0;
+
             for (int i = 0; i < 3; i++)
             {
                 var runeRow = new StatRuneRow
@@ -584,9 +608,12 @@
                     runeRow.Runes.Add(new StatRune
                     {
                         RowId = runeRow.Id,
+                        RuneType = (StatRuneType)runeTypeValues[runesAddedCount],
                         Description = currentDescription,
                         ImagePath = $"wwwroot/images/statrunes/{currentDescription.Split(" ").First()}.png",
                     });
+
+                    runesAddedCount++;
                 }
 
                 await this.statRuneRowsRepository.AddAsync(runeRow);

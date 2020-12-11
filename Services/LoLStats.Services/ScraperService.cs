@@ -30,7 +30,7 @@
         {
             var concurrentBag = new ConcurrentBag<ChampionPageDto>();
 
-            var championKeys = this.riotSharpService.GetAllChampionKeys().Where(x => x != "Rell").ToArray();
+            var championKeys = this.riotSharpService.GetAllChampionKeys().Where(c => c != "Rell").ToArray();
 
             Parallel.For(0, championKeys.Length, (i) =>
             {
@@ -193,7 +193,7 @@
                 {
                     foreach (var activeRuneElement in runeRowElement.Children.Where(x => x.ClassName == "shard shard-active"))
                     {
-                        string[] statRuneValues = { "Attack", "Speed", "Armor", "Resist", "Health", "CDR" };
+                        string[] statRuneValues = { "Adaptive", "Attack", "Armor", "Magic", "Health", "CDR" };
 
                         string runeDescription = Regex.Match(activeRuneElement.InnerHtml, statRuneNamePatter).ToString();
 
@@ -203,7 +203,7 @@
                         {
                             string value = statRuneValues[i];
 
-                            if (descriptionWords[descriptionWords.Length - 2] == value)
+                            if (descriptionWords.Contains(value))
                             {
                                 championPageDto.StatRunes.Add((StatRuneType)i);
                             }

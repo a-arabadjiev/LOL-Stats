@@ -52,9 +52,7 @@
 
         public DbSet<ChampionAbilitiesAbility> ChampionsAbilitiesAbility { get; set; }
 
-        public DbSet<CounterChampion> CounterChampions { get; set; }
-
-        public DbSet<ChampionCounterChampions> ChampionCounterChampions { get; set; }
+        public DbSet<ChampionCounter> ChampionCounters { get; set; }
 
         public DbSet<ChampionInfo> ChampionsInfo { get; set; }
 

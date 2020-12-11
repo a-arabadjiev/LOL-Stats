@@ -9,7 +9,7 @@
 
         public BaseAbility Ability { get; set; }
 
-        public int Level { get; set; }
+        public byte Level { get; set; }
 
         public double Cooldown { get; set; }
 

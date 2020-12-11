@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoLStats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201210132113_Create")]
-    partial class Create
+    [Migration("20201211095553_FixCounterChampionEntity")]
+    partial class FixCounterChampionEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,21 +34,6 @@ namespace LoLStats.Data.Migrations
                     b.HasIndex("ChampionAbilitiesId");
 
                     b.ToTable("BaseAbilityChampionAbilities");
-                });
-
-            modelBuilder.Entity("ChampionCounterChampion", b =>
-                {
-                    b.Property<string>("ChampionsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CounterChampionsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ChampionsId", "CounterChampionsId");
-
-                    b.HasIndex("CounterChampionsId");
-
-                    b.ToTable("ChampionCounterChampion");
                 });
 
             modelBuilder.Entity("ChampionItemsItem", b =>
@@ -172,8 +157,8 @@ namespace LoLStats.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
+                    b.Property<byte>("Level")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -521,7 +506,7 @@ namespace LoLStats.Data.Migrations
                     b.ToTable("ChampionsAbilitiesAbility");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionCounterChampions", b =>
+            modelBuilder.Entity("LoLStats.Data.Models.ChampionCounter", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -531,10 +516,10 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("ChampionId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CounterChampionId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("CounterChampionName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CounterChapmionId")
+                    b.Property<string>("CounterChapmionKey")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -549,15 +534,19 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<double>("WinRate")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChampionId");
 
-                    b.HasIndex("CounterChampionId");
-
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("ChampionCounterChampions");
+                    b.ToTable("ChampionCounters");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.ChampionInfo", b =>
@@ -1108,39 +1097,6 @@ namespace LoLStats.Data.Migrations
                     b.ToTable("ChampionsSummonerSpellsSummonerSpell");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.CounterChampion", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalMatches")
-                        .HasColumnType("int");
-
-                    b.Property<double>("WinRate")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("CounterChampions");
-                });
-
             modelBuilder.Entity("LoLStats.Data.Models.EnemyTip", b =>
                 {
                     b.Property<int>("Id")
@@ -1358,7 +1314,7 @@ namespace LoLStats.Data.Migrations
                     b.Property<string>("RowId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("RuneType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1589,21 +1545,6 @@ namespace LoLStats.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ChampionCounterChampion", b =>
-                {
-                    b.HasOne("LoLStats.Data.Models.Champion", null)
-                        .WithMany()
-                        .HasForeignKey("ChampionsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LoLStats.Data.Models.CounterChampion", null)
-                        .WithMany()
-                        .HasForeignKey("CounterChampionsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ChampionItemsItem", b =>
                 {
                     b.HasOne("LoLStats.Data.Models.ChampionItems", null)
@@ -1774,19 +1715,13 @@ namespace LoLStats.Data.Migrations
                     b.Navigation("ChampionAbilities");
                 });
 
-            modelBuilder.Entity("LoLStats.Data.Models.ChampionCounterChampions", b =>
+            modelBuilder.Entity("LoLStats.Data.Models.ChampionCounter", b =>
                 {
                     b.HasOne("LoLStats.Data.Models.Champion", "Champion")
-                        .WithMany()
+                        .WithMany("ChampionCounters")
                         .HasForeignKey("ChampionId");
 
-                    b.HasOne("LoLStats.Data.Models.CounterChampion", "CounterChampion")
-                        .WithMany()
-                        .HasForeignKey("CounterChampionId");
-
                     b.Navigation("Champion");
-
-                    b.Navigation("CounterChampion");
                 });
 
             modelBuilder.Entity("LoLStats.Data.Models.ChampionItems", b =>
@@ -2036,6 +1971,8 @@ namespace LoLStats.Data.Migrations
                     b.Navigation("BestStartingItems");
 
                     b.Navigation("BestSummonerSpells");
+
+                    b.Navigation("ChampionCounters");
 
                     b.Navigation("ChampionRoles");
 
