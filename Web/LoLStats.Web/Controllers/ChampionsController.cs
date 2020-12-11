@@ -30,7 +30,7 @@
 
         public IActionResult ById(string id)
         {
-
+            return null;
         }
     }
 }

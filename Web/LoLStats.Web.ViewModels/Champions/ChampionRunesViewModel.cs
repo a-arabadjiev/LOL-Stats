@@ -14,6 +14,6 @@
 
         public string ChampionId { get; set; }
 
-        public ICollection<RuneViewModel> Runes { get; set; }
+        //public ICollection<RuneViewModel> Runes { get; set; }
     }
 }

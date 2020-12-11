@@ -26,9 +26,9 @@
             return champions;
         }
 
-        public T GetById<T>()
-        {
-            var champion = 
-        }
+        //public T GetById<T>()
+        //{
+        //    return <this.championsRepository.AllAsNoTracking().First();
+        //}
     }
 }
