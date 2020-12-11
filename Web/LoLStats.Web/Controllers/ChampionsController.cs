@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using LoLStats.Services.Data;
     using LoLStats.Web.ViewModels;
     using LoLStats.Web.ViewModels.Champions;
