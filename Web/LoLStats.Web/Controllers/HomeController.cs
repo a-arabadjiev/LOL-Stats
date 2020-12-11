@@ -5,9 +5,7 @@
     using System.Diagnostics;
     using System.Threading.Tasks;
 
-    using LoLStats.Common;
     using LoLStats.Services;
-    using LoLStats.Services.Models.RiotApiDtos;
     using LoLStats.Web.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;

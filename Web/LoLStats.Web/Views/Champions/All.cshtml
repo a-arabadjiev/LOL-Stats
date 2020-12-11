@@ -1,0 +1,17 @@
+﻿@model LoLStats.Web.ViewModels.Champions.ChampionsListViewModel
+@{
+    this.ViewData["Title"] = "All Champions";
+}
+
+<h1 class="h1">All Champions:</h1>
+
+<div class="row">
+    @foreach (var champion in this.Model.Champions)
+    {
+    <div class="img-with-text col-md-1">
+        <img src="@champion.ImageUrl" alt="champion-icon" width="80" height="80" class="img-thumbnail">
+        <h6>@champion.Name</h6>
+    </div>
+    }
+</div>
+
