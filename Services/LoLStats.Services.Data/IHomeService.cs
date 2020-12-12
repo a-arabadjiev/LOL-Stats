@@ -4,6 +4,8 @@
 
     public interface IHomeService
     {
-        LoLBaseDataViewModel GetBaseGameCounts();
+        BaseDataViewModel GetBaseGameCounts();
+
+        TopChampionsListViewModel GetTopChampionsForEachRole();
     }
 }

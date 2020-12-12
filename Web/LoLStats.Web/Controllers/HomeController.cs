@@ -28,9 +28,13 @@
 
         public IActionResult Index()
         {
-            LoLBaseDataViewModel countsModel = this.homeService.GetBaseGameCounts();
+            HomeViewModel homeViewModel = new HomeViewModel
+            {
+                BaseData = this.homeService.GetBaseGameCounts(),
+                TopChampionsForRole = this.homeService.GetTopChampionsForEachRole(),
+            };
 
-            return this.View(countsModel);
+            return this.View(homeViewModel);
         }
 
         public async Task<IActionResult> Privacy()

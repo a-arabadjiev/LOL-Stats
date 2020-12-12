@@ -1,6 +1,6 @@
 ﻿namespace LoLStats.Web.ViewModels.Home
 {
-    public class LoLBaseDataViewModel
+    public class BaseDataViewModel
     {
         public int ChampionsCount { get; set; }
 
