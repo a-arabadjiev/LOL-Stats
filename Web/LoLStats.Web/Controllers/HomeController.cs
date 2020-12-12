@@ -6,8 +6,9 @@
     using System.Threading.Tasks;
 
     using LoLStats.Services;
+    using LoLStats.Services.Data;
     using LoLStats.Web.ViewModels;
-
+    using LoLStats.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
@@ -15,17 +16,21 @@
         private readonly IScraperService scraperService;
         private readonly IRiotSharpService riotSharpService;
         private readonly IDbService dbService;
+        private readonly IHomeService homeService;
 
-        public HomeController(IScraperService scraperService, IRiotSharpService riotSharpService, IDbService dbService)
+        public HomeController(IScraperService scraperService, IRiotSharpService riotSharpService, IDbService dbService, IHomeService homeService)
         {
             this.scraperService = scraperService;
             this.riotSharpService = riotSharpService;
             this.dbService = dbService;
+            this.homeService = homeService;
         }
 
         public IActionResult Index()
         {
-            return this.View();
+            LoLBaseDataViewModel countsModel = this.homeService.GetBaseGameCounts();
+
+            return this.View(countsModel);
         }
 
         public async Task<IActionResult> Privacy()

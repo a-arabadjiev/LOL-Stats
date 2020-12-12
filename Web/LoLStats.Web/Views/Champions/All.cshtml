@@ -3,12 +3,14 @@
     this.ViewData["Title"] = "All Champions";
 }
 
-<h1 class="h1">All Champions:</h1>
+<div class="container-fluid row col-md-6">
+    <h1 class="h1">All Champions:</h1>
+</div>
 
-<div class="row">
+<div class="row col-md-8 container-fluid">
     @foreach (var champion in this.Model.Champions)
     {
-    <div class="img-with-text col-md-1">
+    <div class="img-with-text col-md-2">
         <img src="@champion.ImageUrl" alt="champion-icon" width="80" height="80" class="img-thumbnail">
         <h6>@champion.Name</h6>
     </div>
