@@ -1,9 +1,6 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    using LoLStats.Data.Models;
-    using LoLStats.Services.Mapping;
-
-    public class RiotApiChampionStatsDto : IMapTo<ChampionStats>
+    public class RiotApiChampionStatsDto
     {
         public double Armor { get; set; }
 

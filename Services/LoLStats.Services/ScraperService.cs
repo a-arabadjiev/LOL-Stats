@@ -30,7 +30,7 @@
         {
             var concurrentBag = new ConcurrentBag<ChampionPageDto>();
 
-            var championKeys = this.riotSharpService.GetAllChampionKeys().Where(c => c != "Rell").ToArray();
+            var championKeys = this.riotSharpService.GetAllChampionKeys().ToArray();
 
             Parallel.For(0, championKeys.Length, (i) =>
             {

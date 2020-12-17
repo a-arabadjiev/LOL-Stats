@@ -1,6 +1,7 @@
 ﻿namespace LoLStats.Services.Data
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using LoLStats.Web.ViewModels.Champions;
 
@@ -8,6 +9,6 @@
     {
         IEnumerable<T> GetAll<T>();
 
-        //T GetById<T>();
+        Task<ChampionStatsViewModel> GetById(string id);
     }
 }

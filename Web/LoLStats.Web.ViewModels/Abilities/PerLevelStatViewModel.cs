@@ -1,7 +1,9 @@
-﻿namespace LoLStats.Services.Models.RiotApiDtos
+﻿namespace LoLStats.Web.ViewModels.Abilities
 {
-    public class RiotApiAbilityPerLevelDto
+    public class PerLevelStatViewModel
     {
+        public string BaseChampionAbilityId { get; set; }
+
         public byte Level { get; set; }
 
         public double Cooldown { get; set; }

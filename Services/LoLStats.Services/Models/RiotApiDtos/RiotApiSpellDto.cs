@@ -2,11 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using LoLStats.Data.Models;
     using LoLStats.Data.Models.Enums;
-    using LoLStats.Services.Mapping;
 
-    public class RiotApiSpellDto : IMapTo<BaseAbility>
+    public class RiotApiSpellDto
     {
         public RiotApiSpellDto()
         {

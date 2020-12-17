@@ -29,9 +29,11 @@
             return this.View(viewModel);
         }
 
-        public IActionResult ById(string id)
+        public async Task<IActionResult> ById(string id)
         {
-            return null;
+            ChampionStatsViewModel viewModel = await this.championsService.GetById(id);
+
+            return this.View(viewModel);
         }
     }
 }

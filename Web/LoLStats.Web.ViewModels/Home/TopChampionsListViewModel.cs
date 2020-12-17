@@ -6,7 +6,7 @@
     {
         public TopChampionsListViewModel()
         {
-            this.TopChampions = new HashSet<TopChampionForRoleViewModel>();
+            this.TopChampions = new List<TopChampionForRoleViewModel>();
         }
 
         public ICollection<TopChampionForRoleViewModel> TopChampions { get; set; }

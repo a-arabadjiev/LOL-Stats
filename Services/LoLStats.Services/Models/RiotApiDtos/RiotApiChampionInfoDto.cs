@@ -1,9 +1,6 @@
 ﻿namespace LoLStats.Services.Models.RiotApiDtos
 {
-    using LoLStats.Data.Models;
-    using LoLStats.Services.Mapping;
-
-    public class RiotApiChampionInfoDto : IMapTo<ChampionInfo>
+    public class RiotApiChampionInfoDto
     {
         public byte Attack { get; set; }
 

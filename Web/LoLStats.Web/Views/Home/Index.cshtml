@@ -30,36 +30,24 @@
             <!-- Main Content -->
             <h1 class="display-4 text-primary align-self-md-center">Welcome to @GlobalConstants.SystemName!</h1>
 
-            <div class="text-center">
-                <div class="col-md-4 offset-md-4">
-                    <p>"League of Legends" currently has:</p>
-                    <ul class="list-group table-bordered">
-                        <li class="list-group-item">Champions: @Model.BaseData.ChampionsCount</li>
-                        <li class="list-group-item">Items: @Model.BaseData.ItemsCount</li>
-                        <li class="list-group-item">Summoner Spells: @Model.BaseData.SummonerSpellsCount</li>
-                        <li class="list-group-item">Runes: @Model.BaseData.RunesCount</li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="container col-md-12 align-self-md-center">
-                <h1 class="text-center text-primary">Top Champions For Each Role:</h1>
+                <h1 class="text-center text-primary">Highest Win Rate For Each Role:</h1>
 
                 <div class="col-md-12 offset-1">
 
                     @foreach (var champion in this.Model.TopChampionsForRole.TopChampions)
                     {
-                        <div class="col-md-2 d-xl-inline-block">
-                            <div>
+                        <div class="col-md-2 d-xl-inline-block bg-gray-300">
+                            <div class="col-md-12">
                                 <img class="img-thumbnail img-fluid" src="@champion.ChampionImageUrl">
                             </div>
                             <div>
-                                <h4 class="font-weight-bolder text-primary">@champion.ChampionName</h4>
-                                <p class="card-text">Role: <strong class="text-danger">@champion.Role</strong></p>
+                                <h5 class="font-weight-bolder text-primary text-break text-center">@champion.ChampionName</h5>
+                                <p class="text-dark text-break text-center">Role: <strong class="text-danger">@champion.Role</strong></p>
 
-                                <p class="card-text"> WinRate: <strong class="text-primary">@champion.WinRate</strong>%</p>
-                                <p class="card-text"> PickRate: <strong class="text-primary">@champion.PickRate</strong>%</p>
-                                <p class="card-text"> BanRate: <strong class="text-primary">@champion.BanRate</strong>%</p>
+                                <p class="text-dark text-break text-center"> WinRate: <strong class="text-primary">@champion.WinRate</strong>%</p>
+                                <p class="text-dark text-break text-center"> PickRate: <strong class="text-primary">@champion.PickRate</strong>%</p>
+                                <p class="text-dark text-break text-center"> BanRate: <strong class="text-primary">@champion.BanRate</strong>%</p>
                             </div>
                         </div>
                 }

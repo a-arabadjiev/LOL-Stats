@@ -1,10 +1,8 @@
-﻿namespace LoLStats.Services.Models.RiotApiDtos
+﻿namespace LoLStats.Web.ViewModels.SummonerSpells
 {
-    public class RiotApiSummonerSpellDto
+    public class SummonerSpellViewModel
     {
         public string Name { get; set; }
-
-        public string Key { get; set; }
 
         public string Tooltip { get; set; }
 

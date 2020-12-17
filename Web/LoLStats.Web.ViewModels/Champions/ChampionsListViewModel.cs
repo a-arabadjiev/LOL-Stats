@@ -4,6 +4,11 @@
 
     public class ChampionsListViewModel
     {
+        public ChampionsListViewModel()
+        {
+            this.Champions = new List<ChampionInListViewModel>();
+        }
+
         public IEnumerable<ChampionInListViewModel> Champions { get; set; }
     }
 }

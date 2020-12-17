@@ -17,7 +17,7 @@
 
         public RiotSharpService(ISanitizerService sanitizerService)
         {
-            this.api = RiotApi.GetDevelopmentInstance("RGAPI-4d168a4d-845a-46e1-be67-44a1277afddc");
+            this.api = RiotApi.GetDevelopmentInstance("RGAPI-ce3720a5-48fe-4c1e-847c-1a669f12924a");
             this.latestVersion = this.api.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
             this.sanitizerService = sanitizerService;
         }
@@ -30,7 +30,6 @@
         public ConcurrentBag<RiotApiChampionDto> ReturnChampionsData()
         {
             var championsBag = new ConcurrentBag<RiotApiChampionDto>();
-
 
             var freeToPlayChampionIds = this.api.Champion.GetChampionRotationAsync(RiotSharp.Misc.Region.Euw).GetAwaiter().GetResult().FreeChampionIds;
 
