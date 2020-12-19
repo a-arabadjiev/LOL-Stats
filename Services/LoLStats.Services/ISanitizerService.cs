@@ -5,5 +5,7 @@
         string SanitizeString(string stringToParse);
 
         string SanitizeItemDescription(string description);
+
+        string RemoveSpacesAndSymbols(string stringToParse);
     }
 }

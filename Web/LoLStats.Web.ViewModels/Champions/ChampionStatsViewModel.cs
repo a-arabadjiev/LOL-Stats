@@ -1,9 +1,8 @@
 ﻿namespace LoLStats.Web.ViewModels.Champions
 {
     using System.Collections.Generic;
-    using AutoMapper;
-    using LoLStats.Data.Models;
-    using LoLStats.Services.Mapping;
+
+    using LoLStats.Web.ViewModels.Runes;
 
     public class ChampionStatsViewModel
     {
@@ -15,6 +14,9 @@
             this.BestItems = new List<ChampionItemsViewModel>();
             this.BestRunes = new List<ChampionRunesViewModel>();
             this.ChampionCounters = new List<ChampionCounterViewModel>();
+            this.AllPrimaryRunes = new List<RuneViewModel>();
+            this.AllSecondaryRunes = new List<RuneViewModel>();
+            this.AllStatRunes = new List<StatRuneViewModel>();
         }
 
         public string Name { get; set; }
@@ -38,5 +40,11 @@
         public ICollection<ChampionRunesViewModel> BestRunes { get; set; }
 
         public ICollection<ChampionCounterViewModel> ChampionCounters { get; set; }
+
+        public ICollection<RuneViewModel> AllPrimaryRunes { get; set; }
+
+        public ICollection<RuneViewModel> AllSecondaryRunes { get; set; }
+
+        public ICollection<StatRuneViewModel> AllStatRunes { get; set; }
     }
 }

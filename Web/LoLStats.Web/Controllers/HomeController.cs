@@ -34,9 +34,8 @@
                 TopChampionsForRole = this.homeService.GetTopChampionsForEachRole(),
             };
 
-
             return this.View(homeViewModel);
-            //return this.RedirectToAction(nameof(this.Privacy));
+            // return this.RedirectToAction(nameof(this.Privacy));
         }
 
         public async Task<IActionResult> Privacy()

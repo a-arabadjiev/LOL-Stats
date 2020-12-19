@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\Data\LoLStats.Data\LoLStats.Data.csproj" />
     <ProjectReference Include="..\..\Web\LoLStats.Web.ViewModels\LoLStats.Web.ViewModels.csproj" />
     <ProjectReference Include="..\LoLStats.Services.Mapping\LoLStats.Services.Mapping.csproj" />
+    <ProjectReference Include="..\LoLStats.Services\LoLStats.Services.csproj" />
   </ItemGroup>
 
 </Project>

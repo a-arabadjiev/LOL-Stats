@@ -11,5 +11,7 @@
         public string ImageUrl { get; set; }
 
         public string RunePath { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

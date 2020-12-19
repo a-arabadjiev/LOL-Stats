@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
-    using LoLStats.Data.Common.Repositories;
     using LoLStats.Data;
-
+    using LoLStats.Data.Common.Repositories;
     using LoLStats.Data.Models;
     using LoLStats.Services.Mapping;
     using LoLStats.Web.ViewModels.Abilities;
@@ -14,7 +14,6 @@
     using LoLStats.Web.ViewModels.Runes;
     using LoLStats.Web.ViewModels.SummonerSpells;
     using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
 
     public class ChampionsService : IChampionsService
     {
@@ -28,6 +27,7 @@
         private readonly IDeletableEntityRepository<BaseAbility> baseAbilitiesRepository;
         private readonly IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository;
         private readonly IDeletableEntityRepository<ChampionSummonerSpellsSummonerSpell> championSummonerSpellsSummonerSpellRepository;
+        private readonly ISanitizerService sanitizerService;
 
         public ChampionsService(
             ApplicationDbContext db,
@@ -39,7 +39,8 @@
             IDeletableEntityRepository<ChampionSummonerSpells> championSummonerSpellsRepository,
             IDeletableEntityRepository<BaseAbility> baseAbilitiesRepository,
             IDeletableEntityRepository<SummonerSpell> summonerSpellsRepository,
-            IDeletableEntityRepository<ChampionSummonerSpellsSummonerSpell> championSummonerSpellsSummonerSpellRepository)
+            IDeletableEntityRepository<ChampionSummonerSpellsSummonerSpell> championSummonerSpellsSummonerSpellRepository,
+            ISanitizerService sanitizerService)
         {
             this.db = db;
             this.championsRepository = championsRepository;
@@ -51,6 +52,7 @@
             this.baseAbilitiesRepository = baseAbilitiesRepository;
             this.summonerSpellsRepository = summonerSpellsRepository;
             this.championSummonerSpellsSummonerSpellRepository = championSummonerSpellsSummonerSpellRepository;
+            this.sanitizerService = sanitizerService;
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -72,7 +74,7 @@
 
         private async Task<ChampionStatsViewModel> ReturnChampionStatsViewModel(string id)
         {
-            var dbChampion = this.db.Champions
+            var dbChampion = await this.db.Champions
                 .Include(x => x.Passive)
                 .Include(x => x.BestAbilities).ThenInclude(x => x.Abilities).ThenInclude(x => x.PerLevelStats)
                 .Include(x => x.BestStartingItems).ThenInclude(x => x.Items)
@@ -82,7 +84,7 @@
                 .Include(x => x.ChampionCounters)
                 .Include(x => x.ChampionRoles)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync<Champion>(x => x.Id == id).GetAwaiter().GetResult();
+                .FirstOrDefaultAsync<Champion>(x => x.Id == id);
 
             var dbChampionRole = dbChampion.ChampionRoles.FirstOrDefault();
 
@@ -108,6 +110,7 @@
                     TotalMatches = dbChampionRole.TotalMatches,
                     Role = dbChampionRole.Role.ToString(),
                     Tier = dbChampionRole.Tier,
+                    ImagePath = $"/images/roles/{dbChampionRole.Role.ToString().ToLower()}.png",
                 },
             };
 
@@ -155,7 +158,7 @@
             championToAdd.BestAbilities.Add(championAbilitiesToAdd);
 
             // Summoner Spells
-            var dbBestSummonerSpells = this.championSummonerSpellsRepository.AllAsNoTracking().Where(x => x.ChampionId == id).FirstOrDefault();
+            var dbBestSummonerSpells = dbChampion.BestSummonerSpells.FirstOrDefault();
 
             var championSummonerSpellsToAdd = new ChampionSummonerSpellsViewModel
             {
@@ -226,7 +229,7 @@
 
             championToAdd.BestItems.Add(championItemsToAdd);
 
-            // Runes
+            // ChampionRunes
             var dbBestRunes = dbChampion.BestRunes.FirstOrDefault();
 
             var championRunesToAdd = new ChampionRunesViewModel
@@ -246,6 +249,7 @@
                     ImageUrl = rune.ImageUrl,
                     IsKeystone = rune.IsKeystone,
                     RunePath = rune.RunePathId,
+                    IsActive = true,
                 };
 
                 championRunesToAdd.Runes.Add(runeToAdd);
@@ -259,8 +263,9 @@
                 {
                     Description = statRune.Description,
                     ImagePath = statRune.ImagePath,
-                    Row = statRune.RowId,
+                    RowId = statRune.RowId,
                     RuneType = statRune.RuneType.ToString(),
+                    IsActive = true,
                 };
 
                 championRunesToAdd.StatRunes.Add(statRuneToAdd);
@@ -275,12 +280,87 @@
                 {
                     CounterChapmionKey = counterChampion.CounterChapmionKey,
                     CounterChampionName = counterChampion.CounterChampionName,
+                    ImageUrl = counterChampion.ImageUrl,
                     TotalMatches = counterChampion.TotalMatches,
                     WinRate = counterChampion.WinRate,
                 };
 
                 championToAdd.ChampionCounters.Add(counterChampionToAdd);
             }
+
+            // Runes
+            var primaryRunes = this.db.Runes.Where(x => x.RunePathId == dbBestRunes.MainRuneTree.ToString()).ToList();
+            var secondaryRunes = this.db.Runes.Where(x => x.RunePathId == dbBestRunes.SecondaryRuneTree.ToString()).ToList();
+
+            foreach (var primaryRune in primaryRunes)
+            {
+                var primaryRuneToAdd = new RuneViewModel
+                {
+                    Name = primaryRune.Name,
+                    IsKeystone = primaryRune.IsKeystone,
+                    ImageUrl = primaryRune.ImageUrl,
+                    ShortDescription = primaryRune.ShortDescription,
+                    RunePath = primaryRune.RunePathId,
+                    IsActive = championToAdd.BestRunes.FirstOrDefault()
+                        .Runes
+                        .Any(x => x.Name == primaryRune.Name),
+                };
+
+                if (!primaryRuneToAdd.IsActive)
+                {
+                    primaryRuneToAdd.ImageUrl = $"/images/runes/grayscaled/{primaryRune.RunePathId}/{this.sanitizerService.RemoveSpacesAndSymbols(primaryRune.Name)}.png";
+                }
+
+                championToAdd.AllPrimaryRunes.Add(primaryRuneToAdd);
+            }
+
+            foreach (var secondaryRune in secondaryRunes)
+            {
+                var secondaryRuneToAdd = new RuneViewModel
+                {
+                    Name = secondaryRune.Name,
+                    IsKeystone = secondaryRune.IsKeystone,
+                    ImageUrl = secondaryRune.ImageUrl,
+                    ShortDescription = secondaryRune.ShortDescription,
+                    RunePath = secondaryRune.RunePathId,
+                    IsActive = championToAdd.BestRunes.FirstOrDefault()
+                        .Runes
+                        .Any(x => x.Name == secondaryRune.Name),
+                };
+
+                if (!secondaryRuneToAdd.IsActive)
+                {
+                    secondaryRuneToAdd.ImageUrl = $"/images/runes/grayscaled/{secondaryRune.RunePathId}/{this.sanitizerService.RemoveSpacesAndSymbols(secondaryRune.Name)}.png";
+                }
+
+                championToAdd.AllSecondaryRunes.Add(secondaryRuneToAdd);
+            }
+
+            // Stat Runes
+            var statRunes = this.db.StatRunes.ToList();
+
+            foreach (var statRune in statRunes)
+            {
+                var statRuneToAdd = new StatRuneViewModel
+                {
+                    RowId = statRune.RowId,
+                    RuneType = statRune.RuneType.ToString(),
+                    Description = statRune.Description,
+                    ImagePath = statRune.ImagePath,
+                    IsActive = championToAdd.BestRunes.FirstOrDefault()
+                        .StatRunes
+                        .Any(x => x.RowId == statRune.RowId && x.Description == statRune.Description),
+                };
+
+                if (!statRuneToAdd.IsActive)
+                {
+                    statRuneToAdd.ImagePath = statRuneToAdd.ImagePath.Insert(18, "/grayscaled/GS");
+                }
+
+                championToAdd.AllStatRunes.Add(statRuneToAdd);
+            }
+
+            championToAdd.BestRunes.First().StatRunes = championToAdd.BestRunes.First().StatRunes.Reverse().ToList();
 
             return championToAdd;
         }

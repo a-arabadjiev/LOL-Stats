@@ -14,5 +14,7 @@
         public int TotalMatches { get; set; }
 
         public double BanRate { get; set; }
+
+        public string ImagePath { get; set; }
     }
 }

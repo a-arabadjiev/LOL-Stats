@@ -9,6 +9,8 @@
 
         public string CounterChapmionKey { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public double WinRate { get; set; }
 
         public int TotalMatches { get; set; }

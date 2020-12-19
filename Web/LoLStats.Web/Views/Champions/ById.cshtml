@@ -3,4 +3,78 @@
     this.ViewData["Title"] = "ChampionPage";
 }
 
-<h1>@Model.Name</h1>
+
+<div class="container-fluid">
+    <div class="col-md-2">
+        <img src="@Model.ChampionRole.ImagePath" alt="role-icon" class="img-fluid">
+    </div>
+    <h1 class="h1">@Model.Name</h1>
+    <div class="container col-md-12">
+        <img src="@Model.ImageUrl" alt="champion-icon" width="80" height="80" class="img-fluid">
+    </div>
+    <div class="container col-md-12">
+        <div class="card" style="width: 18rem;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Recommended Skill Priority
+                    @foreach (var ability in Model.BestAbilities.First().Abilities)
+                    {
+                        <img src="@ability.ImageUrl" width="50" height="50" alt="ability-icon" class="img-fluid">
+                        <i class="fas fa-angle-right"></i>
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        @foreach (var spell in Model.BestSummonerSpells.First().SummonerSpells)
+        {
+            <img src="@spell.ImageUrl" width="50" height="50" alt="summoner-spell-icon" class="img-fluid">
+        }
+    </div>
+
+    <div>
+        @foreach (var item in Model.BestStartingItems.First().Items)
+        {
+            <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
+        }
+    </div>
+
+    <div>
+        @foreach (var item in Model.BestItems.First().Items)
+        {
+            <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
+        }
+    </div>
+
+    <div>
+        @foreach (var rune in this.Model.AllPrimaryRunes)
+        {
+            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+        }
+    </div>
+
+
+    <div>
+        @foreach (var rune in this.Model.AllSecondaryRunes)
+        {
+            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+        }
+    </div>
+
+
+    <div>
+        @foreach (var statRune in this.Model.AllStatRunes)
+        {
+            <img src="@statRune.ImagePath" alt="statrune-icon" class="img-fluid">
+        }
+    </div>
+
+    <div>
+        @foreach (var champion in this.Model.ChampionCounters)
+        {
+            <img src="@champion.ImageUrl" alt="statrune-icon" width="50" height="50" class="img-fluid">
+        }
+    </div>
+</div>

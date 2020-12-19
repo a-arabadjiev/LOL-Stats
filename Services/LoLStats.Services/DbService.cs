@@ -142,6 +142,7 @@
                     ChampionId = championPageDto.Key,
                     CounterChampionName = counterChampion.Name,
                     CounterChapmionKey = counterChampion.Id,
+                    ImageUrl = counterChampion.ImageUrl,
                 };
 
                 await this.championCountersRepository.AddAsync(championCounter);
@@ -661,7 +662,7 @@
                         RowId = runeRow.Id,
                         RuneType = (StatRuneType)runeTypeValues[runesAddedCount],
                         Description = currentDescription,
-                        ImagePath = $"wwwroot/images/statrunes/{currentDescription.Split(" ").First()}.png",
+                        ImagePath = $"/images/statrunes/{currentDescription.Split(" ").First()}.png",
                     });
 
                     runesAddedCount++;

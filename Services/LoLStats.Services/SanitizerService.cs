@@ -28,5 +28,12 @@
 
             return Regex.Replace(removedHtmlDescription, "[ ]{2,}", " ").Trim();
         }
+
+        public string RemoveSpacesAndSymbols(string stringToParse)
+        {
+            var parsedString = stringToParse.Replace(" ", string.Empty).Replace(":", string.Empty).Replace("'", string.Empty);
+
+            return parsedString;
+        }
     }
 }
