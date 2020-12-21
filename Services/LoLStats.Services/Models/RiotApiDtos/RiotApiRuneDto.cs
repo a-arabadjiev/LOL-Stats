@@ -12,6 +12,10 @@
 
         public string LongDescription { get; set; }
 
+        public int Count { get; set; }
+
+        public RuneRow Row { get; set; }
+
         public RuneTreeType RunePath { get; set; }
 
         public string ImageUrl { get; set; }

@@ -4,7 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
+
     using LoLStats.Data.Models.Enums;
     using LoLStats.Services.Models.RiotApiDtos;
     using RiotSharp;
@@ -17,7 +17,7 @@
 
         public RiotSharpService(ISanitizerService sanitizerService)
         {
-            this.api = RiotApi.GetDevelopmentInstance("RGAPI-50b08c15-42bf-42a3-bc85-d7d6769d70fe");
+            this.api = RiotApi.GetDevelopmentInstance("RGAPI-58084645-3667-433c-8bd8-e13077f0819f");
             this.latestVersion = this.api.StaticData.Versions.GetAllAsync().GetAwaiter().GetResult()[0];
             this.sanitizerService = sanitizerService;
         }
@@ -182,6 +182,7 @@
                 {
                     var runeTreeSlots = runeTree.Slots;
 
+                    int currentRuneCount = 0;
                     foreach (var rune in runeTreeSlots[i].Runes)
                     {
                         RiotApiRuneDto runeDto = new RiotApiRuneDto
@@ -192,9 +193,12 @@
                             LongDescription = this.sanitizerService.SanitizeString(rune.LongDescription),
                             ImageUrl = "https://ddragon.canisback.com/img/" + rune.Icon,
                             IsKeystone = i == 0 ? true : false,
+                            Row = (RuneRow)i,
+                            Count = currentRuneCount,
                         };
 
                         runesBag.Add(runeDto);
+                        currentRuneCount++;
                     }
                 }
 

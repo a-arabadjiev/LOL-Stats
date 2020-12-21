@@ -13,6 +13,8 @@
 
         public virtual ICollection<Item> Items { get; set; }
 
+        public string ItemPriority { get; set; }
+
         public string ChampionId { get; set; }
 
         public virtual Champion Champion { get; set; }

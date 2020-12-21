@@ -18,7 +18,11 @@
 
         public string MainRuneTree { get; set; }
 
+        public string MainRuneTreeImageUrl { get; set; }
+
         public string SecondaryRuneTree { get; set; }
+
+        public string SecondaryRuneTreeImageUrl { get; set; }
 
         public string ChampionId { get; set; }
 

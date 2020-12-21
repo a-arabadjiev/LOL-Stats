@@ -22,6 +22,10 @@
 
         public string ImageUrl { get; set; }
 
+        public int Count { get; set; }
+
+        public RuneRow Row { get; set; }
+
         public virtual RunePath RunePath { get; set; }
 
         public string RunePathId { get; set; }

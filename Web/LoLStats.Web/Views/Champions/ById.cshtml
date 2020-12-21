@@ -3,78 +3,216 @@
     this.ViewData["Title"] = "ChampionPage";
 }
 
+<div class="container">
+    <div class="card shadow mb-4">
 
-<div class="container-fluid">
-    <div class="col-md-2">
-        <img src="@Model.ChampionRole.ImagePath" alt="role-icon" class="img-fluid">
-    </div>
-    <h1 class="h1">@Model.Name</h1>
-    <div class="container col-md-12">
-        <img src="@Model.ImageUrl" alt="champion-icon" width="80" height="80" class="img-fluid">
-    </div>
-    <div class="container col-md-12">
-        <div class="card" style="width: 18rem;">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    Recommended Skill Priority
-                    @foreach (var ability in Model.BestAbilities.First().Abilities)
-                    {
-                        <img src="@ability.ImageUrl" width="50" height="50" alt="ability-icon" class="img-fluid">
-                        <i class="fas fa-angle-right"></i>
-                    }
-                </li>
-            </ul>
+        @*<div class="col-md-2">
+            <img src="@Model.ChampionRole.ImagePath" alt="role-icon" class="img-fluid">
+        </div>*@
+
+        <div class="container row">
+            <div class="col-md-6">
+                <img src="@Model.ImageUrl" alt="champion-icon" width="100" height="100" class="img-fluid fa-pull-left rounded">
+                <h1 class="h1"><strong class="text-primary">@Model.Name</strong> build for <p class="text-danger">@Model.ChampionRole.Role</p></h1>
+            </div>
+            @*<div class="col-md-6 offset-5">
+                <h1 class="h1"><strong class="text-primary">@Model.Name</strong> build for <p class="text-danger">@Model.ChampionRole.Role</p></h1>
+            </div>*@
         </div>
+
+        <div class="card-body col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Recommmended Skill Priority</th>
+                            <th>Win Rate</th>
+                            <th>Total Matches</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class"container">
+                                @foreach (var ability in Model.BestAbilities.First().Abilities)
+                                {
+                                    <img src="@ability.ImageUrl" width="50" height="50" alt="ability-icon">
+                                }
+                            </td>
+                            <td>@Model.BestAbilities.First().WinRate</td>
+                            <td>@Model.BestAbilities.First().TotalMatches</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Recommmended Summoner Spells</th>
+                            <th>Win Rate</th>
+                            <th>Total Matches</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class"container">
+                                @foreach (var summonerSpell in Model.BestSummonerSpells.First().SummonerSpells)
+                                {
+                                    <img src="@summonerSpell.ImageUrl" width="50" height="50" alt="summonerspell-icon" class="img-fluid">
+                                }
+                            </td>
+                            <td>@Model.BestSummonerSpells.First().WinRate</td>
+                            <td>@Model.BestSummonerSpells.First().TotalMatches</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Recommmended Starting Items</th>
+                            <th>Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class"container">
+                                @foreach (var item in Model.BestStartingItems.First().Items)
+                                {
+                                    <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
+                                }
+                            </td>
+                            <td>@Model.BestStartingItems.First().WinRate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Recommmended Final Build</th>
+                            <th>Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class"container">
+                                @foreach (var item in Model.BestItems.First().Items)
+                                {
+                                    <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
+                                }
+                            </td>
+                            <td>@Model.BestItems.First().WinRate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Recommmended Runes</th>
+                            <th>Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class"container">
+
+                                <div class="container col-sm-4 float-left border-right">
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.PrimaryRunesKeystoneRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.PrimaryRunesSecondRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.PrimaryRunesThirdRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.PrimaryRunesFourthRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                </div>
+
+                                <div class="container col-sm-4 float-left border-left border-right">
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.SecondaryRunesSecondRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.SecondaryRunesThirdRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var rune in this.Model.SecondaryRunesFourthRow)
+                                        {
+                                            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
+                                        }
+                                    </div>
+
+                                </div>
+
+                                <div class="container col-sm-4 float-left border-left">
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var statRune in this.Model.StatRunesFirstRow)
+                                        {
+                                            <img src="@statRune.ImagePath" alt="statrune-icon" class="img-fluid">
+                                        }
+                                    </div>
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var statRune in this.Model.StatRunesSecondRow)
+                                        {
+                                            <img src="@statRune.ImagePath" alt="statrune-icon" class="img-fluid">
+                                        }
+                                    </div>
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        @foreach (var statRune in this.Model.StatRunesThirdRow)
+                                        {
+                                            <img src="@statRune.ImagePath" alt="statrune-icon" class="img-fluid">
+                                        }
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td>@Model.BestRunes.First().WinRate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
     </div>
 
-    <div>
-        @foreach (var spell in Model.BestSummonerSpells.First().SummonerSpells)
-        {
-            <img src="@spell.ImageUrl" width="50" height="50" alt="summoner-spell-icon" class="img-fluid">
-        }
     </div>
-
-    <div>
-        @foreach (var item in Model.BestStartingItems.First().Items)
-        {
-            <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
-        }
-    </div>
-
-    <div>
-        @foreach (var item in Model.BestItems.First().Items)
-        {
-            <img src="@item.ImageUrl" width="50" height="50" alt="item-icon" class="img-fluid">
-        }
-    </div>
-
-    <div>
-        @foreach (var rune in this.Model.AllPrimaryRunes)
-        {
-            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
-        }
-    </div>
-
-
-    <div>
-        @foreach (var rune in this.Model.AllSecondaryRunes)
-        {
-            <img src="@rune.ImageUrl" width="50" height="50" alt="rune-icon" class="img-fluid">
-        }
-    </div>
-
-
-    <div>
-        @foreach (var statRune in this.Model.AllStatRunes)
-        {
-            <img src="@statRune.ImagePath" alt="statrune-icon" class="img-fluid">
-        }
-    </div>
-
-    <div>
-        @foreach (var champion in this.Model.ChampionCounters)
-        {
-            <img src="@champion.ImageUrl" alt="statrune-icon" width="50" height="50" class="img-fluid">
-        }
-    </div>
-</div>

@@ -11,6 +11,8 @@
             this.Items = new HashSet<Item>();
         }
 
+        public string ItemPriority { get; set; }
+
         public virtual ICollection<Item> Items { get; set; }
 
         public string ChampionId { get; set; }

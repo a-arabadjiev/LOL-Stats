@@ -15,6 +15,8 @@
 
         public double WinRate { get; set; }
 
+        public string SummonerSpellPriority { get; set; }
+
         public virtual ICollection<SummonerSpell> SummonerSpells { get; set; }
 
         public string ChampionId { get; set; }

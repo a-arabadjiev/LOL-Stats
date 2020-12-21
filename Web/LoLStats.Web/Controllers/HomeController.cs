@@ -35,14 +35,15 @@
             };
 
             return this.View(homeViewModel);
+
             // return this.RedirectToAction(nameof(this.Privacy));
         }
 
         public async Task<IActionResult> Privacy()
         {
             // Testing
-            //await this.dbService.AddBaseGameData();
-            //await this.dbService.AddChampionStatisticsData();
+            // await this.dbService.AddBaseGameData();
+            // await this.dbService.AddChampionStatisticsData();
 
             return this.View();
         }

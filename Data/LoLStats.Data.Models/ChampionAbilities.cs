@@ -17,6 +17,8 @@
 
         public string ChampionId { get; set; }
 
+        public string SkillPriority { get; set; }
+
         public virtual Champion Champion { get; set; }
 
         public virtual ICollection<BaseAbility> Abilities { get; set; }

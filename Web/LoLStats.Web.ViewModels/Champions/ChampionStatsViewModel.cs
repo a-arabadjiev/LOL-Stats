@@ -14,9 +14,16 @@
             this.BestItems = new List<ChampionItemsViewModel>();
             this.BestRunes = new List<ChampionRunesViewModel>();
             this.ChampionCounters = new List<ChampionCounterViewModel>();
-            this.AllPrimaryRunes = new List<RuneViewModel>();
-            this.AllSecondaryRunes = new List<RuneViewModel>();
-            this.AllStatRunes = new List<StatRuneViewModel>();
+            this.PrimaryRunesKeystoneRow = new List<RuneViewModel>();
+            this.PrimaryRunesSecondRow = new List<RuneViewModel>();
+            this.PrimaryRunesThirdRow = new List<RuneViewModel>();
+            this.PrimaryRunesFourthRow = new List<RuneViewModel>();
+            this.SecondaryRunesSecondRow = new List<RuneViewModel>();
+            this.SecondaryRunesThirdRow = new List<RuneViewModel>();
+            this.SecondaryRunesFourthRow = new List<RuneViewModel>();
+            this.StatRunesFirstRow = new List<StatRuneViewModel>();
+            this.StatRunesSecondRow = new List<StatRuneViewModel>();
+            this.StatRunesThirdRow = new List<StatRuneViewModel>();
         }
 
         public string Name { get; set; }
@@ -41,10 +48,24 @@
 
         public ICollection<ChampionCounterViewModel> ChampionCounters { get; set; }
 
-        public ICollection<RuneViewModel> AllPrimaryRunes { get; set; }
+        public ICollection<RuneViewModel> PrimaryRunesKeystoneRow { get; set; }
 
-        public ICollection<RuneViewModel> AllSecondaryRunes { get; set; }
+        public ICollection<RuneViewModel> PrimaryRunesSecondRow { get; set; }
 
-        public ICollection<StatRuneViewModel> AllStatRunes { get; set; }
+        public ICollection<RuneViewModel> PrimaryRunesThirdRow { get; set; }
+
+        public ICollection<RuneViewModel> PrimaryRunesFourthRow { get; set; }
+
+        public ICollection<RuneViewModel> SecondaryRunesSecondRow { get; set; }
+
+        public ICollection<RuneViewModel> SecondaryRunesThirdRow { get; set; }
+
+        public ICollection<RuneViewModel> SecondaryRunesFourthRow { get; set; }
+
+        public ICollection<StatRuneViewModel> StatRunesFirstRow { get; set; }
+
+        public ICollection<StatRuneViewModel> StatRunesSecondRow { get; set; }
+
+        public ICollection<StatRuneViewModel> StatRunesThirdRow { get; set; }
     }
 }

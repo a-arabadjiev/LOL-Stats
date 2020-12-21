@@ -237,6 +237,7 @@
             {
                 ChampionId = championPageDto.Key,
                 WinRate = (int)Math.Round(championPageDto.ItemsWinRateKvp.Values.Average()),
+                ItemPriority = string.Join(", ", championPageDto.ItemsWinRateKvp.Keys),
             };
 
             await this.championItemsRepository.AddAsync(championItems);
@@ -281,6 +282,7 @@
                 ChampionId = championPageDto.Key,
                 WinRate = championPageDto.StartingItemsWinRate,
                 PickRate = championPageDto.StartingItemsPickRate,
+                ItemPriority = string.Join(", ", championPageDto.StartingItems),
             };
 
             await this.championStarterItemsRepository.AddAsync(championStarterItems);
@@ -325,6 +327,7 @@
                 ChampionId = championPageDto.Key,
                 WinRate = championPageDto.SummonerSpellsWinRate,
                 TotalMatches = championPageDto.SummonerSpellsTotalMatches,
+                SummonerSpellPriority = string.Join(", ", championPageDto.SummonerSpells),
             };
 
             await this.championSummonerSpellsRepository.AddAsync(championSummonerSpells);
@@ -389,6 +392,7 @@
                 ChampionId = championPageDto.Key,
                 WinRate = championPageDto.SkillsWinRate,
                 TotalMatches = championPageDto.SkillsMatchesCount,
+                SkillPriority = string.Join(", ", championPageDto.SkillsPriority),
             };
 
             await this.championAbilitiesRepository.AddAsync(championAbilities);
@@ -623,6 +627,8 @@
                         ImageUrl = runeDto.ImageUrl,
                         IsKeystone = runeDto.IsKeystone,
                         RunePathId = runeTree.Id,
+                        Row = runeDto.Row,
+                        Count = runeDto.Count,
                     };
 
                     runeTree.Runes.Add(rune);

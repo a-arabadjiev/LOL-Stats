@@ -4,14 +4,16 @@ using LoLStats.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LoLStats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201220123915_AddCountPropertyToRuneEntity")]
+    partial class AddCountPropertyToRuneEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,9 +455,6 @@ namespace LoLStats.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("SkillPriority")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("TotalMatches")
                         .HasColumnType("int");
 
@@ -612,9 +611,6 @@ namespace LoLStats.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ItemPriority")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -888,9 +884,6 @@ namespace LoLStats.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ItemPriority")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -1055,9 +1048,6 @@ namespace LoLStats.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("SummonerSpellPriority")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalMatches")
                         .HasColumnType("int");
@@ -1224,9 +1214,6 @@ namespace LoLStats.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Row")
-                        .HasColumnType("int");
 
                     b.Property<string>("RunePathId")
                         .HasColumnType("nvarchar(450)");

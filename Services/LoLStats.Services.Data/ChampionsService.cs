@@ -290,9 +290,10 @@
 
             // Runes
             var primaryRunes = this.db.Runes.Where(x => x.RunePathId == dbBestRunes.MainRuneTree.ToString()).ToList();
-            var secondaryRunes = this.db.Runes.Where(x => x.RunePathId == dbBestRunes.SecondaryRuneTree.ToString()).ToList();
+            var secondaryRunes = this.db.Runes.Where(x => x.RunePathId == dbBestRunes.SecondaryRuneTree.ToString() && !x.IsKeystone).ToList();
 
-            foreach (var primaryRune in primaryRunes)
+            int counterPrimaryRunes = 0;
+            foreach (var primaryRune in primaryRunes.OrderBy(x => x.Row).ThenBy(x => x.Count))
             {
                 var primaryRuneToAdd = new RuneViewModel
                 {
@@ -311,10 +312,28 @@
                     primaryRuneToAdd.ImageUrl = $"/images/runes/grayscaled/{primaryRune.RunePathId}/{this.sanitizerService.RemoveSpacesAndSymbols(primaryRune.Name)}.png";
                 }
 
-                championToAdd.AllPrimaryRunes.Add(primaryRuneToAdd);
+                if (primaryRuneToAdd.IsKeystone)
+                {
+                    championToAdd.PrimaryRunesKeystoneRow.Add(primaryRuneToAdd);
+                }
+                else if (counterPrimaryRunes < 3)
+                {
+                    championToAdd.PrimaryRunesSecondRow.Add(primaryRuneToAdd);
+                    counterPrimaryRunes++;
+                }
+                else if (counterPrimaryRunes >= 3 && counterPrimaryRunes < 6)
+                {
+                    championToAdd.PrimaryRunesThirdRow.Add(primaryRuneToAdd);
+                    counterPrimaryRunes++;
+                }
+                else if (counterPrimaryRunes >= 6)
+                {
+                    championToAdd.PrimaryRunesFourthRow.Add(primaryRuneToAdd);
+                }
             }
 
-            foreach (var secondaryRune in secondaryRunes)
+            int counterSecondaryRunes = 0;
+            foreach (var secondaryRune in secondaryRunes.OrderBy(x => x.Row).ThenBy(x => x.Count))
             {
                 var secondaryRuneToAdd = new RuneViewModel
                 {
@@ -333,12 +352,27 @@
                     secondaryRuneToAdd.ImageUrl = $"/images/runes/grayscaled/{secondaryRune.RunePathId}/{this.sanitizerService.RemoveSpacesAndSymbols(secondaryRune.Name)}.png";
                 }
 
-                championToAdd.AllSecondaryRunes.Add(secondaryRuneToAdd);
+                if (counterSecondaryRunes < 3)
+                {
+                    championToAdd.SecondaryRunesSecondRow.Add(secondaryRuneToAdd);
+                    counterSecondaryRunes++;
+                }
+                else if (counterSecondaryRunes >= 3 && counterSecondaryRunes < 6)
+                {
+                    championToAdd.SecondaryRunesThirdRow.Add(secondaryRuneToAdd);
+                    counterSecondaryRunes++;
+                }
+                else if (counterSecondaryRunes >= 6)
+                {
+                    championToAdd.SecondaryRunesFourthRow.Add(secondaryRuneToAdd);
+                }
             }
 
             // Stat Runes
             var statRunes = this.db.StatRunes.ToList();
+            statRunes.Reverse();
 
+            int counterStatRunes = 0;
             foreach (var statRune in statRunes)
             {
                 var statRuneToAdd = new StatRuneViewModel
@@ -357,10 +391,22 @@
                     statRuneToAdd.ImagePath = statRuneToAdd.ImagePath.Insert(18, "/grayscaled/GS");
                 }
 
-                championToAdd.AllStatRunes.Add(statRuneToAdd);
+                if (counterStatRunes < 3)
+                {
+                    championToAdd.StatRunesFirstRow.Add(statRuneToAdd);
+                    counterStatRunes++;
+                }
+                else if (counterStatRunes >= 3 && counterStatRunes < 6)
+                {
+                    championToAdd.StatRunesSecondRow.Add(statRuneToAdd);
+                    counterStatRunes++;
+                }
+                else if (counterStatRunes >= 6)
+                {
+                    championToAdd.StatRunesThirdRow.Add(statRuneToAdd);
+                    counterStatRunes++;
+                }
             }
-
-            championToAdd.BestRunes.First().StatRunes = championToAdd.BestRunes.First().StatRunes.Reverse().ToList();
 
             return championToAdd;
         }
