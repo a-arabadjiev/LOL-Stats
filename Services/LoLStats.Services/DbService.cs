@@ -282,7 +282,7 @@
                 ChampionId = championPageDto.Key,
                 WinRate = championPageDto.StartingItemsWinRate,
                 PickRate = championPageDto.StartingItemsPickRate,
-                ItemPriority = string.Join(", ", championPageDto.StartingItems),
+                ItemPriority = string.Join(", ", championPageDto.StartingItems.Where(x => x != string.Empty)),
             };
 
             await this.championStarterItemsRepository.AddAsync(championStarterItems);

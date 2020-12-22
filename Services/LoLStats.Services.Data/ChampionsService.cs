@@ -93,7 +93,7 @@
             {
                 Name = dbChampion.Name,
                 ImageUrl = dbChampion.ImageUrl,
-                IsFree = false,
+                IsFree = dbChampion.IsFree,
                 Passive = new ChampionPassiveViewModel
                 {
                     Name = dbChampion.Passive.Name,
@@ -123,10 +123,13 @@
                 TotalMatches = dbBestAbilities.TotalMatches,
             };
 
-            var dbAbilities = dbBestAbilities.Abilities;
+            var abilityPriority = dbBestAbilities.SkillPriority.Split(", ");
 
-            foreach (var ability in dbAbilities)
+            for (int i = 0; i < abilityPriority.Length; i++)
             {
+                string abilityName = abilityPriority[i];
+                var ability = dbBestAbilities.Abilities.FirstOrDefault(x => x.AbilityType.ToString() == abilityName);
+
                 var abilityToAdd = new BaseAbilityViewModel
                 {
                     AbilityType = ability.AbilityType.ToString(),
@@ -155,6 +158,38 @@
                 championAbilitiesToAdd.Abilities.Add(abilityToAdd);
             }
 
+            //var dbAbilities = dbBestAbilities.Abilities;
+
+            //foreach (var ability in dbAbilities)
+            //{
+            //    var abilityToAdd = new BaseAbilityViewModel
+            //    {
+            //        AbilityType = ability.AbilityType.ToString(),
+            //        Description = ability.Description,
+            //        ImageUrl = ability.ImageUrl,
+            //        MaxRank = ability.MaxRank,
+            //        Name = ability.Name,
+            //    };
+
+            //    var dbStatsPerLevel = ability.PerLevelStats;
+
+            //    foreach (var stats in ability.PerLevelStats)
+            //    {
+            //        var statsToAdd = new PerLevelStatViewModel
+            //        {
+            //            Level = stats.Level,
+            //            Cooldown = stats.Cooldown,
+            //            Cost = stats.Cost,
+            //            CostsPerSecond = stats.CostsPerSecond,
+            //            Range = stats.Range,
+            //        };
+
+            //        abilityToAdd.PerLevelStats.Add(statsToAdd);
+            //    }
+
+            //    championAbilitiesToAdd.Abilities.Add(abilityToAdd);
+            //}
+
             championToAdd.BestAbilities.Add(championAbilitiesToAdd);
 
             // Summoner Spells
@@ -166,8 +201,13 @@
                 TotalMatches = dbBestSummonerSpells.TotalMatches,
             };
 
-            foreach (var spell in dbBestSummonerSpells.SummonerSpells)
+            var summonerSpellPriority = dbBestSummonerSpells.SummonerSpellPriority.Split(", ");
+
+            for (int i = 0; i < summonerSpellPriority.Length; i++)
             {
+                string summonerSpellName = summonerSpellPriority[i];
+                var spell = dbBestSummonerSpells.SummonerSpells.FirstOrDefault(x => x.Name == summonerSpellName);
+
                 var summonerSpellToAdd = new SummonerSpellViewModel
                 {
                     Name = spell.Name,
@@ -191,8 +231,13 @@
                 PickRate = dbBestStarterItems.PickRate,
             };
 
-            foreach (var item in dbBestStarterItems.Items)
+            var startingItemPriority = dbBestStarterItems.ItemPriority.Split(", ").Where(x => x != string.Empty).ToArray();
+
+            for (int i = 0; i < startingItemPriority.Length; i++)
             {
+                string itemName = startingItemPriority[i];
+                var item = dbBestStarterItems.Items.FirstOrDefault(x => x.Name == itemName);
+
                 var itemToAdd = new ItemViewModel
                 {
                     Name = item.Name,
@@ -214,8 +259,13 @@
                 WinRate = dbBestStarterItems.WinRate,
             };
 
-            foreach (var item in dbBestItems.Items)
+            var itemPriority = dbBestItems.ItemPriority.Split(", ");
+
+            for (int i = 0; i < itemPriority.Length; i++)
             {
+                string itemName = itemPriority[i];
+                var item = dbBestItems.Items.FirstOrDefault(x => x.Name == itemName);
+
                 var itemToAdd = new ItemViewModel
                 {
                     Name = item.Name,
