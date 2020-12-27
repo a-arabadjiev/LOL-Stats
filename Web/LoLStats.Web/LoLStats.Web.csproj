@@ -44,6 +44,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Champions\ById.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\images\roles\adc.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -113,5 +116,9 @@
     <Content Update="wwwroot\images\statrunes\Magic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Builds\" />
   </ItemGroup>
 </Project>

@@ -11,9 +11,9 @@
     <div class="row col-lg-8 container-fluid bg-gray-400 table-bordered">
         @foreach (var champion in this.Model.Champions)
         {
-        <div class="img-with-text col-md-2">
+        <div class="img-with-text col-md-1">
             <a asp-controller="Champions" asp-action="ById" asp-route-id="@champion.Id"><img src="@champion.ImageUrl" alt="champion-icon" width="80" height="80" class="img-thumbnail img-fluid"></a>
-            <h6 class="text-dark font-weight-bold">@champion.Name</h6>
+            <h6 class="h6 text-primary font-weight-bold">@champion.Name</h6>
         </div>
         }
     </div>

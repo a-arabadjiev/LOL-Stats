@@ -1,0 +1,134 @@
+﻿@model LoLStats.Web.ViewModels.Guides.GuideInputModel
+
+@{
+    this.ViewData["Title"] = "Create Build";
+}
+
+<style>
+    img-fluid {
+        display: inline-block;
+        border-radius: 60px;
+        box-shadow: 0px 0px 2px #888;
+        padding: 0.5em 0.6em;
+    }
+</style>
+
+<form method="post" class="col-md-6 offset-md-3"
+      enctype="multipart/form-data">
+    <h1 class="h1 text-primary">@this.ViewData["Title"]</h1>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="GuideTitle">Guide Title</label>
+        <input asp-for="GuideTitle" class="form-control" />
+        <span asp-validation-for="GuideTitle" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ChampionRole">Role</label>
+        <div>
+            @foreach (var role in Model.Roles)
+            {
+                <img src="@role.ImagePath" alt="@role.Name" data-content="@role.Name" id="@role.Name" class="img-fluid btn rounded">
+            }
+        </div>
+        <input asp-for="GuideTitle" class="form-control" />
+        <span asp-validation-for="ChampionRole" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ChampionName">Champion</label>
+        <div class="container bg-gradient-secondary">
+            @foreach (var champion in Model.AllChampions)
+            {
+                <img src="@champion.ImageUrl" alt="@champion.Name" data-content="@champion.Id" id="@champion.Id" class="img-fluid btn col-md-1">
+            }
+        </div>
+        <input asp-for="ChampionName" type="hidden" class="form-control" />
+        <span asp-validation-for="ChampionName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SummonerSpellA">Summoner Spells</label>
+        <div>
+            @foreach (var spell in Model.AllSummonerSpells)
+            {
+                <img src="@spell.ImageUrl" alt="@spell.Name" data-content="@spell.Key" id="@spell.Key" class="img-fluid btn rounded">
+            }
+        </div>
+        <input asp-for="SummonerSpellA" class="form-control" />
+        <input asp-for="SummonerSpellB" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RunesNotes">Runes</label>
+        <div>
+            @foreach (var spell in Model.AllSummonerSpells)
+            {
+                <img src="@spell.ImageUrl" alt="@spell.Name" data-content="@spell.Key" id="@spell.Key" class="img-fluid btn rounded">
+            }
+        </div>
+        <input asp-for="SummonerSpellA" class="form-control" />
+        <input asp-for="SummonerSpellB" class="form-control" />
+    </div>
+
+    <input type="submit" class="btn btn-primary" />
+</form>
+
+@section Scripts {
+    <script>
+        $("img[data-content]").each(function (el) {
+            $(this).click(function (e) {
+                e.preventDefault();
+                var value = $(this).attr("data-content");
+                var input = $(this).parent().parent().children("input");
+                var inputIndex = 0;
+
+                var isSummonerSpell = value.includes("Summoner");
+
+                if (isSummonerSpell) {
+                    var selectFirstField = input[0].value == "" && input[1].value != value || input[0].value === value;
+
+                    if (selectFirstField) {
+                        inputIndex = 0;
+                    }
+                    else {
+                        inputIndex = 1;
+                    }
+                }
+
+                var isSame = input[inputIndex].value === value;
+
+                if (input[inputIndex].value !== value && input[inputIndex].value !== "" || input[inputIndex].value === value) {
+                    var selectedImage = $("#" + input[inputIndex].value);
+                    selectedImage.css('border-color', 'transparent')
+                    input[inputIndex].value = "";
+                }
+                if (!isSame) {
+                    input[inputIndex].value = value;
+                    $(this).css('border-color', 'lime');
+                }
+            })
+        });
+    </script>
+    <script type="text/javascript">
+        function Login() {
+
+            var Login = {};
+            Login.username = $("#txtUserName").val();
+
+            $.ajax({
+                url: '/api/Login/',
+                method: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: Login,
+                success: function (data) {
+                    alert("Saved successfully");
+                },
+                fail: function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                }
+            })
+        }
+    </script>
+}

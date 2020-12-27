@@ -1,6 +1,5 @@
 ﻿namespace LoLStats.Web.ViewModels.Champions
 {
-
     public class ChampionRoleViewModel
     {
         public string Role { get; set; }

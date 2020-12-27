@@ -1,9 +1,8 @@
 ﻿namespace LoLStats.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using LoLStats.Data.Models;
     using LoLStats.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

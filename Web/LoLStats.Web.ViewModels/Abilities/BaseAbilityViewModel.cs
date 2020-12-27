@@ -19,6 +19,8 @@
 
         public byte MaxRank { get; set; }
 
+        public bool IsFirst { get; set; }
+
         public ICollection<PerLevelStatViewModel> PerLevelStats { get; set; }
     }
 }

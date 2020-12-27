@@ -137,6 +137,7 @@
                     ImageUrl = ability.ImageUrl,
                     MaxRank = ability.MaxRank,
                     Name = ability.Name,
+                    IsFirst = i == 0 ? false : true,
                 };
 
                 var dbStatsPerLevel = ability.PerLevelStats;
@@ -157,38 +158,6 @@
 
                 championAbilitiesToAdd.Abilities.Add(abilityToAdd);
             }
-
-            //var dbAbilities = dbBestAbilities.Abilities;
-
-            //foreach (var ability in dbAbilities)
-            //{
-            //    var abilityToAdd = new BaseAbilityViewModel
-            //    {
-            //        AbilityType = ability.AbilityType.ToString(),
-            //        Description = ability.Description,
-            //        ImageUrl = ability.ImageUrl,
-            //        MaxRank = ability.MaxRank,
-            //        Name = ability.Name,
-            //    };
-
-            //    var dbStatsPerLevel = ability.PerLevelStats;
-
-            //    foreach (var stats in ability.PerLevelStats)
-            //    {
-            //        var statsToAdd = new PerLevelStatViewModel
-            //        {
-            //            Level = stats.Level,
-            //            Cooldown = stats.Cooldown,
-            //            Cost = stats.Cost,
-            //            CostsPerSecond = stats.CostsPerSecond,
-            //            Range = stats.Range,
-            //        };
-
-            //        abilityToAdd.PerLevelStats.Add(statsToAdd);
-            //    }
-
-            //    championAbilitiesToAdd.Abilities.Add(abilityToAdd);
-            //}
 
             championToAdd.BestAbilities.Add(championAbilitiesToAdd);
 
